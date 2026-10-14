@@ -65,7 +65,7 @@
         </h2>
         <p class="text-xs text-slate-400 mb-2">Comprobá cómo lee tu CV el software de Recursos Humanos.</p>
 
-        <!-- SECTOR Y PUESTO OBJETIVO (12 ÁREAS) -->
+        <!-- SECTOR Y PUESTO OBJETIVO (12 ÁREAS COMPLETAS) -->
         <div class="grid grid-cols-1 gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">Área o Sector Laboral:</label>
@@ -560,8 +560,6 @@
       const hasExpSection = textLower.includes("experiencia") || textLower.includes("trayectoria") || textLower.includes("laboral") || textLower.includes("puestos");
       const hasEduSection = textLower.includes("educacion") || textLower.includes("estudios") || textLower.includes("formacion") || textLower.includes("titulo");
       const hasProfileSection = textLower.includes("perfil") || textLower.includes("resumen") || textLower.includes("objetivo") || textLower.includes("presentacion");
-      const hasHardSkills = textLower.includes("conocimientos") || textLower.includes("herramientas") || textLower.includes("normas") || textLower.includes("software") || textLower.includes("tecnicos");
-      const hasLanguages = textLower.includes("ingles") || textLower.includes("inglés") || textLower.includes("idiomas") || textLower.includes("portugues");
 
       // 1. EJE 1: PARSEABILIDAD TÉCNICA Y ESTRUCTURA (0 a 100)
       let structScore = 95;
