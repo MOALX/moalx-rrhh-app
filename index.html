@@ -25,8 +25,8 @@
   <header class="border-b border-slate-800 bg-[#0B0F19]/90 backdrop-blur sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
       
-      <!-- LOGO CON TRIPLE CLIC SECRETO PARA ADMIN -->
-      <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogoClick()">
+      <!-- LOGO MOALX (Sin acceso oculto de clics) -->
+      <div class="flex items-center gap-3">
         <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-2 rounded-xl font-black text-xl tracking-wider shadow-lg shadow-orange-600/20 flex items-center justify-center">
           <i class="fa-solid fa-sparkles text-sm mr-1"></i> MOALX
         </div>
@@ -109,11 +109,11 @@
         <div id="limitAlert" class="hidden bg-red-950/40 border border-red-500/40 rounded-xl p-4 text-center text-xs text-red-200">
           <i class="fa-solid fa-lock text-red-400 text-xl mb-1 block"></i>
           <strong>Límite gratuito alcanzado por hoy.</strong>
-          <p class="mt-1 text-red-300/80">Contratá un Pack o adquirí el Pase Digital para continuar.</p>
+          <p class="mt-1 text-red-300/80">Contratá un Pack Profesional para optimizar tu perfil.</p>
         </div>
       </div>
 
-      <!-- INFORME DIAGNÓSTICO EN TEXTO PLANO -->
+      <!-- INFORME DIAGNÓSTICO PERSUASIVO -->
       <div id="resultsPanel" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl border-t-4 border-t-red-500">
         
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -128,43 +128,28 @@
 
         <p id="scoreSummary" class="text-xs text-slate-300 leading-relaxed font-medium"></p>
 
-        <!-- OBSERVACIONES CUALITATIVAS EN TEXTO PLANO -->
+        <!-- DIAGNÓSTICO EN 4 EJES PERSUASIVOS -->
         <div class="space-y-3 bg-[#0B0F19]/60 p-4 rounded-xl border border-slate-800">
           <h3 class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <i class="fa-solid fa-file-lines text-orange-500"></i> Observaciones Generales del Escaneo:
+            <i class="fa-solid fa-file-lines text-orange-500"></i> Diagnóstico de Compatibilidad Laboral:
           </h3>
-          <div id="issuesList" class="space-y-2 text-xs text-slate-300"></div>
+          <div id="issuesList" class="space-y-2.5 text-xs text-slate-300"></div>
         </div>
 
-        <!-- GATED CONTENT: Auditoría Completa Bloqueada -->
+        <!-- GATED CONTENT: REDIRIGE AL FORMULARIO DE PACKS -->
         <div class="bg-gradient-to-r from-red-950/30 via-[#0B0F19] to-[#0B0F19] border border-red-500/20 rounded-xl p-4 space-y-2 relative shadow-inner">
           <div class="flex items-center gap-2 text-red-400 font-bold text-xs">
             <i class="fa-solid fa-lock text-sm"></i>
-            <span>AUDITORÍA COMPLETA Y RECOMENDACIONES (BLOQUEADO)</span>
+            <span>AUDITORÍA COMPLETA Y REORGANIZACIÓN TÉCNICA (RESERVADO)</span>
           </div>
           <p class="text-[11px] text-slate-300 leading-normal blur-[1.5px] select-none">
-            Se detectó un fallo estructural severo en el encabezado y en la densidad semántica de experiencia. La lista exacta de palabras clave faltantes y el modelo de reescritura técnica se encuentran reservados.
+            Se detectó un fallo estructural severo en la jerarquía del perfil y brecha crítica de palabras clave. El modelo de reescritura técnica y la matriz de competencias se adaptan exclusivamente en nuestros Packs.
           </p>
           <div class="absolute inset-0 bg-[#0B0F19]/60 flex items-center justify-center backdrop-blur-[2px] rounded-xl">
-            <a href="#orderForm" class="bg-orange-500 hover:bg-orange-400 text-white font-bold text-xs px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 transition-all">
+            <a href="#orderForm" class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition-all transform hover:scale-105">
               <i class="fa-solid fa-wrench"></i> Solucionar con un Pack MOALX
             </a>
           </div>
-        </div>
-
-        <!-- OFERTA FRONT-END: Pase Digital -->
-        <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 text-xs space-y-2">
-          <div class="flex justify-between items-center text-slate-200">
-            <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-file-pdf text-orange-500"></i> Pase Digital + Auditoría PDF</span>
-            <span class="text-sm font-black text-white">$15.900 ARS</span>
-          </div>
-          <p class="text-[10px] text-slate-400 leading-relaxed">
-            Obtené el reporte PDF completo con palabras clave faltantes exactas, 15 escaneos por 30 días y el Kit de Plantillas ATS.<br>
-            <strong class="text-orange-400">+ Incluye $15.000 ARS de crédito bonificado</strong> para contratar cualquier Pack.
-          </p>
-          <button onclick="requestDigitalPass()" class="mt-2 w-full border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white font-bold py-2 rounded-lg transition-colors">
-            Adquirir Pase Digital
-          </button>
         </div>
 
       </div>
@@ -278,12 +263,12 @@
 
       <div class="bg-[#0B0F19] p-4 rounded-xl border border-slate-800 text-xs space-y-2.5">
         <div class="flex justify-between items-center text-slate-300 border-b border-slate-800 pb-2">
-          <span>• Pase Digital & Auditoría PDF</span>
-          <strong class="text-orange-400">$14.99 USD</strong>
+          <span>• Packs de Optimización MOALX</span>
+          <strong class="text-orange-400">Desde $35.00 USD</strong>
         </div>
         <div class="flex justify-between items-center text-slate-300">
-          <span>• Packs de Optimización MOALX</span>
-          <strong class="text-white">Desde $35.00 USD</strong>
+          <span>• Perfil LinkedIn / Computrabajo + SEO</span>
+          <strong class="text-white">$75.00 USD</strong>
         </div>
       </div>
 
@@ -302,7 +287,7 @@
     const PHONE_NUMBER = "5493886144395";
     const MAX_DAILY_FREE = 2;
     const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
-    const ADMIN_PASS = "moalx2026";
+    const ADMIN_PASS = "fabianflash1994"; // <--- NUEVA CONTRASEÑA ADMIN
     let currentScore = 0;
 
     const SECTOR_KEYWORDS = {
@@ -322,24 +307,10 @@
     }
 
     // ==========================================
-    // CÓDIGO ADMIN OCULTO (URL / TRIPLE CLIC)
+    // CÓDIGO ADMIN OCULTO (SOLO POR URL ?admin=1)
     // ==========================================
     function isAdmin() {
       return localStorage.getItem('moalx_admin_mode') === 'true';
-    }
-
-    let logoClicks = 0;
-    let logoTimer = null;
-    function handleLogoClick() {
-      logoClicks++;
-      if (logoTimer) clearTimeout(logoTimer);
-
-      if (logoClicks >= 3) {
-        logoClicks = 0;
-        triggerAdminPrompt();
-      } else {
-        logoTimer = setTimeout(() => { logoClicks = 0; }, 1000);
-      }
     }
 
     function triggerAdminPrompt() {
@@ -361,15 +332,19 @@
       }
     }
 
-    // Auto-detección por URL ?admin=1
+    // Auto-detección exclusiva por URL ?admin=1
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === '1') {
       setTimeout(() => {
         triggerAdminPrompt();
+        // Limpia la URL para no dejar rastro
         window.history.replaceState({}, document.title, window.location.pathname);
       }, 300);
     }
 
+    // ==========================================
+    // GESTIÓN DE USO Y LÍMITES
+    // ==========================================
     function getDailyUsage() {
       const today = new Date().toISOString().split('T')[0];
       const data = JSON.parse(localStorage.getItem('moalx_ats_sec') || '{}');
@@ -407,6 +382,9 @@
       }
     }
 
+    // ==========================================
+    // MANEJO DE ARCHIVOS
+    // ==========================================
     const cvTextArea = document.getElementById('cvText');
     const charCountDisplay = document.getElementById('charCount');
 
@@ -458,7 +436,9 @@
       }
     });
 
-    // MOTOR ATS
+    // ==========================================
+    // MOTOR ATS - DIAGNÓSTICO EN 4 EJES PERSUASIVOS
+    // ==========================================
     document.getElementById('analyzeBtn').addEventListener('click', () => {
       const usage = getDailyUsage();
       if (!isAdmin() && usage.count >= MAX_DAILY_FREE) {
@@ -501,36 +481,66 @@
       document.getElementById('scoreValue').textContent = `${overallScore}%`;
       document.getElementById('scoreSummary').textContent = `Basado en los parámetros de sistemas ATS modernos, tu perfil obtuvo un ${overallScore}% de compatibilidad. Los reclutadores corporativos filtran automáticamente perfiles menores a 85%.`;
 
+      // INYECCIÓN DE LOS 4 EJES
       const container = document.getElementById('issuesList');
       container.innerHTML = `
+        <!-- EJE 1: PARSEABILIDAD TÉCNICA -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Estructura y Legibilidad Algorítmica</span>
-            <span class="${structScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${structScore < 60 ? 'Deficiente' : 'Aceptable'}</span>
+            <span>• Parseabilidad y Compatibilidad ATS (Técnico)</span>
+            <span class="${structScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${structScore < 60 ? 'Riesgo Alto' : 'Observado'}</span>
           </div>
-          <p class="text-[11px] text-slate-400 leading-normal">${structScore < 60 ? 'Se detectaron encabezados ambiguos o no estandarizados que dificultan la extracción automática de experiencia y formación.' : 'Estructura general reconocida por el algoritmo, pero con inconsistencias menores en la jerarquía de secciones.'}</p>
+          <p class="text-[11px] text-slate-400 leading-normal">
+            ${structScore < 60 
+              ? 'Se detectó riesgo de lectura parcial. Los sistemas como LinkedIn o Computrabajo pueden omitir tu experiencia reciente o desordenar tus datos al escanear.' 
+              : 'Estructura general reconocida, pero con riesgo de omisión de campos clave por inconsistencias en la jerarquía de secciones.'}
+          </p>
         </div>
 
+        <!-- EJE 2: ESTRATEGIA Y POSICIONAMIENTO -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Densidad Semántica (Vocabulario del Sector)</span>
-            <span class="${kwScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${kwScore < 60 ? 'Baja Densidad' : 'Regular'}</span>
+            <span>• Estrategia y Posicionamiento de Perfil (Reclutador)</span>
+            <span class="text-red-400 font-semibold">Crítico</span>
           </div>
-          <p class="text-[11px] text-slate-400 leading-normal">${kwScore < 60 ? 'Escasa presencia de términos técnicos y competencias normativas clave requeridas de manera estándar para este puesto.' : 'Contiene vocabulario base, pero carece de combinaciones semánticas avanzadas de alto impacto.'}</p>
+          <p class="text-[11px] text-slate-400 leading-normal">
+            Falta de estrategia laboral y titularidad profesional. Tu CV no proyecta seniority para el puesto objetivo y se lee como una descripción genérica de tareas.
+          </p>
         </div>
 
+        <!-- EJE 3: DENSIDAD SEMÁNTICA -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Medición de Impacto y Logros Medibles</span>
-            <span class="${metricScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${metricScore < 60 ? 'Sin Métricas' : 'Moderado'}</span>
+            <span>• Densidad Semántica y Brecha de Palabras Clave</span>
+            <span class="${kwScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${kwScore < 60 ? 'Brecha Crítica' : 'Incompleto'}</span>
           </div>
-          <p class="text-[11px] text-slate-400 leading-normal">${metricScore < 60 ? 'Baja proporción de indicadores cuantitativos (% o cifras). El documento se lee descriptivo y no orientado a resultados.' : 'Presencia moderada de números, pero sin encuadre de logros cuantitativos relevantes.'}</p>
+          <p class="text-[11px] text-slate-400 leading-normal">
+            ${kwScore < 60 
+              ? 'Tu CV no alcanza el umbral de coincidencia del 85%. Faltan términos técnicos normativos y competencias duras clave para superar el primer filtro.' 
+              : 'Posee vocabulario base, pero carece de las combinaciones semánticas avanzadas exigidas por los algoritmos corporativos.'}
+          </p>
+        </div>
+
+        <!-- EJE 4: IMPACTO Y KPIS -->
+        <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-slate-200 flex items-center justify-between">
+            <span>• Impacto Cuantitativo y Orientación a Resultados (KPIs)</span>
+            <span class="${metricScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${metricScore < 60 ? 'Redacción Pasiva' : 'Sin Métricas'}</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-normal">
+            ${metricScore < 60 
+              ? 'Redacción pasiva. Tu experiencia describe "lo que hacías" pero no demuestra "qué lograste" (ausencia de porcentajes, cifras o volumen de gestión).' 
+              : 'Registra algunas cifras aisladas, pero sin el encuadre de logros cuantitativos relevantes que buscan los reclutadores para avanzar.'}
+          </p>
         </div>
       `;
 
       document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
 
+    // ==========================================
+    // WHATSAPP Y MODAL USD
+    // ==========================================
     function handleOrderSubmit(e) {
       e.preventDefault();
 
@@ -555,19 +565,15 @@
       window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
     }
 
-    function requestDigitalPass() {
-      const msg = encodeURIComponent("Hola MOALX RRHH, realicé el test gratuito y me interesa adquirir el *Pase Digital + Auditoría PDF* por $15.900 ARS, que incluye el crédito a favor para los Packs.");
-      window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
-    }
-
     function contactUSDWhatsApp() {
-      const msg = encodeURIComponent("Hola MOALX RRHH, me interesa consultar por la contratación de un Pack / Pase Digital desde el exterior (Pago en USD vía PayPal/WU).");
+      const msg = encodeURIComponent("Hola MOALX RRHH, me interesa consultar por la contratación de un Pack MOALX desde el exterior (Pago en USD vía PayPal/WU).");
       window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
     }
 
     function openUSDModal() { document.getElementById('usdModal').classList.remove('hidden'); }
     function closeUSDModal() { document.getElementById('usdModal').classList.add('hidden'); }
 
+    // Init
     updateDailyUI();
   </script>
 </body>
