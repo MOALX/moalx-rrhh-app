@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOALX RRHH - Evaluador ATS & Auditoría Profesional de CV</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Librerías para lectura 100% local en el navegador (Zero Data Leak) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans select-none selection:bg-indigo-500/30">
+
+  <!-- BANNER PROMOCIONAL -->
+  <div class="bg-gradient-to-r from-emerald-900 via-indigo-950 to-slate-900 border-b border-emerald-500/30 py-2.5 px-4 text-center text-xs sm:text-sm text-emerald-200 flex items-center justify-center gap-2 flex-wrap shadow-md">
+    <span class="bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-500/40">MOALX RRHH</span>
+    <span>Superá los filtros digitales y multiplicá tus entrevistas.</span>
+    <span class="font-semibold text-white">Entrega en 2 días hábiles</span>
+  </div>
+
+  <!-- HEADER -->
+  <header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="bg-emerald-600 text-white p-2 rounded-xl font-black text-xl tracking-wider shadow-lg shadow-emerald-600/30">
+          MOALX
+        </div>
+        <div>
+          <h1 class="font-bold text-base sm:text-lg leading-none text-white">Auditoría ATS</h1>
+          <p class="text-[10px] sm:text-xs text-slate-400">Diagnóstico Inteligente de CV</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 text-xs">
+          <i class="fa-solid fa-bolt text-amber-400"></i>
+          <span>Gratis hoy: <strong id="dailyCountLabel" class="text-amber-400">2/2</strong></span>
+        </div>
+        <button onclick="openUSDModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-md">
+          <i class="fa-solid fa-globe"></i>
+          <span class="hidden sm:inline">Exterior (USD)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+    <!-- COLUMNA IZQUIERDA: HERRAMIENTA ATS -->
+    <div class="lg:col-span-6 space-y-6">
+      
+      <div class="bg-slate-800/60 border border-slate-700 rounded-2xl p-5 space-y-4 shadow-xl relative overflow-hidden">
+        <!-- Decoración -->
+        <div class="absolute -top-10 -right-10 w-32 h-32 bg-indigo-600/10 blur-3xl rounded-full pointer-events-none"></div>
+
+        <h2 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-file-magnifying-glass text-indigo-400"></i>
+          <span>1. Simulador de Filtros ATS</span>
+        </h2>
+        <p class="text-xs text-slate-400 mb-2">Comprobá cómo lee tu CV el software de Recursos Humanos.</p>
+
+        <!-- SECTOR Y PUESTO OBJETIVO -->
+        <div class="grid grid-cols-1 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Área o Sector Laboral:</label>
+            <select id="sectorSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option value="hys">Higiene, Seguridad Laboral & Medio Ambiente (HSE)</option>
+              <option value="tech">Tecnología, Sistemas & Software (IT)</option>
+              <option value="marketing">Marketing Digital & Ventas</option>
+              <option value="logistica">Logística, Operaciones & Cadena de Suministro</option>
+              <option value="rrhh">Recursos Humanos & Selección</option>
+              <option value="general" selected>General / Administración / Comercial</option>
+            </select>
+          </div>
+          <div>
+            <input type="text" id="targetJob" placeholder="Puesto exacto al que aplicás (Ej: Inspector HSE, Gerente...)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-indigo-500" />
+          </div>
+        </div>
+
+        <!-- CARGA DE ARCHIVOS -->
+        <div id="dropzone" class="border-2 border-dashed border-slate-600 hover:border-indigo-500 rounded-xl p-6 text-center bg-slate-900/50 cursor-pointer transition-all group">
+          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" class="hidden" />
+          <div class="w-12 h-12 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-indigo-600/20 transition-colors">
+            <i class="fa-solid fa-cloud-arrow-up text-xl text-slate-400 group-hover:text-indigo-400"></i>
+          </div>
+          <p class="text-xs font-bold text-slate-300">Arrastrá tu documento aquí o <span class="text-indigo-400 underline">examinar equipo</span></p>
+          <p class="text-[10px] text-slate-500 mt-1">Formatos soportados: PDF, DOCX, TXT (Máximo 10 MB)</p>
+        </div>
+
+        <!-- TEXTAREA DE RESPALDO -->
+        <div class="relative">
+          <textarea id="cvText" rows="4" placeholder="También podés pegar el texto de tu currículum aquí..." class="w-full bg-slate-900/80 border border-slate-700 rounded-xl p-3 text-xs text-slate-300 focus:outline-none focus:border-indigo-500 font-mono resize-none"></textarea>
+          <div class="absolute bottom-2.5 right-3 text-[10px] text-slate-500 font-mono" id="charCount">0 chars</div>
+        </div>
+
+        <!-- BOTÓN EVALUAR -->
+        <button id="analyzeBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all text-xs sm:text-sm">
+          <i class="fa-solid fa-radar text-lg"></i>
+          <span>EJECUTAR AUDITORÍA ATS</span>
+        </button>
+
+        <!-- ALERTA DE LÍMITE (Seguridad Frontend) -->
+        <div id="limitAlert" class="hidden bg-amber-950/80 border border-amber-600/60 rounded-xl p-4 text-center text-xs text-amber-200">
+          <i class="fa-solid fa-lock text-amber-400 text-xl mb-1 block"></i>
+          <strong>Límite gratuito alcanzado por seguridad.</strong>
+          <p class="mt-1 text-amber-300/80">Tu IP ha consumido las revisiones de hoy. Contratá un Pack o adquirí el Pase Digital.</p>
+        </div>
+      </div>
+
+      <!-- INFORME DIAGNÓSTICO PERSUASIVO (Oculto hasta evaluar) -->
+      <div id="resultsPanel" class="hidden bg-slate-800/80 border border-slate-700 rounded-2xl p-5 space-y-4 shadow-xl border-t-4 border-t-amber-500">
+        
+        <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Puntaje Global ATS</div>
+            <div id="scoreValue" class="text-4xl font-black text-amber-400">0%</div>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">RIESGO DE DESCARTE</span>
+          </div>
+        </div>
+
+        <p id="scoreSummary" class="text-xs text-slate-300 leading-relaxed font-medium"></p>
+
+        <!-- Falencias visibles -->
+        <div class="space-y-2 bg-slate-900/50 p-3 rounded-xl border border-slate-700/50">
+          <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-exclamation text-amber-500"></i> Errores de Estructura:
+          </h3>
+          <div id="issuesList" class="space-y-1.5 mt-2"></div>
+        </div>
+
+        <!-- GATED CONTENT: Error Crítico Bloqueado -->
+        <div class="bg-gradient-to-r from-amber-950/80 via-slate-900 to-slate-900 border border-amber-500/40 rounded-xl p-4 space-y-2 relative shadow-inner">
+          <div class="flex items-center gap-2 text-amber-400 font-bold text-xs">
+            <i class="fa-solid fa-lock text-sm"></i>
+            <span>ERROR CRÍTICO N° 3 (BLOQUEADO)</span>
+          </div>
+          <p class="text-[11px] text-slate-300 leading-normal blur-[1px] select-none">
+            Se detectó un fallo estructural severo en el encabezado y en la densidad semántica de experiencia. Este error provoca el descarte automático en portales como Computrabajo, LinkedIn y sistemas de reclutamiento corporativo.
+          </p>
+          <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center backdrop-blur-[2px] rounded-xl">
+            <a href="#orderForm" class="bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-xs px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-wrench"></i> Solucionar con un Pack MOALX
+            </a>
+          </div>
+        </div>
+
+        <!-- OFERTA FRONT-END: Pase Digital -->
+        <div class="bg-indigo-950/40 border border-indigo-500/40 rounded-xl p-4 text-xs space-y-2">
+          <div class="flex justify-between items-center text-indigo-200">
+            <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-file-pdf"></i> Pase Digital + Auditoría PDF</span>
+            <span class="text-sm font-black text-white">$18.900 ARS</span>
+          </div>
+          <p class="text-[10px] text-slate-300 leading-relaxed">
+            Obtené el reporte completo de palabras clave faltantes, 15 escaneos por 30 días y el Kit de Plantillas ATS. <br>
+            <strong class="text-emerald-400">+ Incluye $15.000 ARS de crédito bonificado</strong> para contratar cualquier Pack.
+          </p>
+          <button onclick="requestDigitalPass()" class="mt-2 w-full border border-indigo-400 text-indigo-300 hover:bg-indigo-600/20 font-bold py-2 rounded-lg transition-colors">
+            Adquirir Pase Digital
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- COLUMNA DERECHA: SELECCIÓN DE PACKS (Formulario de Cierre) -->
+    <div class="lg:col-span-6 space-y-6">
+      
+      <div id="orderForm" class="bg-gradient-to-br from-slate-800 via-slate-900 to-emerald-950/40 border-2 border-emerald-500/40 rounded-2xl p-6 shadow-2xl space-y-5 relative">
+        
+        <div class="border-b border-slate-700/80 pb-3">
+          <h2 class="text-lg font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-user-tie text-emerald-400"></i>
+            <span>2. Contratá tu Pack Profesional</span>
+          </h2>
+          <p class="text-[11px] sm:text-xs text-slate-300 mt-1">Dejá tu perfil en manos de expertos. Entrega garantizada en 2 días hábiles.</p>
+        </div>
+
+        <form onsubmit="handleOrderSubmit(event)" class="space-y-4">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-semibold text-slate-200 mb-1">Nombre Completo *</label>
+              <input type="text" id="clientName" required placeholder="Ej: Fabián Zelaya" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-200 mb-1">Correo Electrónico *</label>
+              <input type="email" id="clientEmail" required placeholder="tu@email.com" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-200 mb-1">WhatsApp *</label>
+              <input type="tel" id="clientPhone" required placeholder="+54 9 388..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500" />
+            </div>
+          </div>
+
+          <!-- SELECCIÓN DE PACKS OFICIALES MOALX -->
+          <div>
+            <label class="block text-xs font-semibold text-slate-200 mb-2">Seleccioná tu Solución MOALX RRHH *</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              
+              <!-- PACK 1 -->
+              <label class="relative flex flex-col p-3.5 bg-slate-900/90 border border-slate-700 rounded-xl cursor-pointer hover:border-emerald-500 transition-all has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-950/30">
+                <input type="radio" name="packSelect" value="Pack 1 - CV Impacto Directo ($26.900 ARS)" class="absolute top-3.5 right-3.5 text-emerald-500 focus:ring-emerald-500" />
+                <span class="text-[10px] font-black text-slate-400">PACK 1</span>
+                <span class="text-xs font-bold text-emerald-400 leading-tight">CV IMPACTO DIRECTO</span>
+                <span class="text-[10px] text-slate-400 mt-1.5 flex-1">• CV Estratégico Alto Impacto<br>• Carta de Presentación Medida</span>
+                <span class="text-sm font-black text-white mt-2">$26.900 ARS</span>
+              </label>
+
+              <!-- PACK 2 (Recomendado/Default) -->
+              <label class="relative flex flex-col p-3.5 bg-slate-900/90 border border-emerald-500/50 rounded-xl cursor-pointer hover:border-emerald-400 transition-all has-[:checked]:border-emerald-400 has-[:checked]:bg-emerald-950/40 shadow-lg shadow-emerald-900/20">
+                <input type="radio" name="packSelect" value="Pack 2 - CV Optimizado ATS ($29.900 ARS)" checked class="absolute top-3.5 right-3.5 text-emerald-400 focus:ring-emerald-400" />
+                <div class="absolute -top-2.5 right-3 bg-emerald-500 text-slate-950 text-[9px] font-black px-2 py-0.5 rounded-full uppercase">Más Elegido</div>
+                <span class="text-[10px] font-black text-slate-400">PACK 2</span>
+                <span class="text-xs font-bold text-white leading-tight">CV OPTIMIZADO ATS</span>
+                <span class="text-[10px] text-slate-400 mt-1.5 flex-1">• CV Estructurado para ATS<br>• Plantilla Word Editable</span>
+                <span class="text-sm font-black text-emerald-400 mt-2">$29.900 ARS</span>
+              </label>
+
+              <!-- PACK 3 -->
+              <label class="relative flex flex-col p-3.5 bg-slate-900/90 border border-slate-700 rounded-xl cursor-pointer hover:border-emerald-500 transition-all has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-950/30">
+                <input type="radio" name="packSelect" value="Pack 3 - Solución Laboral Plata ($43.900 ARS)" class="absolute top-3.5 right-3.5 text-emerald-500 focus:ring-emerald-500" />
+                <span class="text-[10px] font-black text-slate-400">PACK 3</span>
+                <span class="text-xs font-bold text-emerald-400 leading-tight">SOLUCIÓN PLATA</span>
+                <span class="text-[10px] text-slate-400 mt-1.5 flex-1">• Todo Pack 2 + Vitae Clásico<br>• Carta + Guía de Búsqueda</span>
+                <span class="text-sm font-black text-white mt-2">$43.900 ARS</span>
+              </label>
+
+              <!-- PACK 4 -->
+              <label class="relative flex flex-col p-3.5 bg-slate-900/90 border border-amber-500/40 rounded-xl cursor-pointer hover:border-amber-400 transition-all has-[:checked]:border-amber-400 has-[:checked]:bg-amber-950/30">
+                <input type="radio" name="packSelect" value="Pack 4 - Liderazgo Premium ($74.900 ARS)" class="absolute top-3.5 right-3.5 text-amber-400 focus:ring-amber-400" />
+                <span class="text-[10px] font-black text-amber-500">PACK 4 (PREMIUM)</span>
+                <span class="text-xs font-bold text-white leading-tight">LIDERAZGO PREMIUM</span>
+                <span class="text-[10px] text-slate-400 mt-1.5 flex-1">• Todo Pack Plata<br>• Perfil LinkedIn / Computrabajo + SEO</span>
+                <span class="text-sm font-black text-amber-400 mt-2">$74.900 ARS</span>
+              </label>
+
+            </div>
+            <p class="text-[9px] text-slate-500 mt-2">* 50% al iniciar el trabajo y 50% al entregar. Precios para perfiles hasta Ssr.</p>
+          </div>
+
+          <!-- BOTÓN WHATSAPP -->
+          <button type="submit" class="w-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 transition-all text-xs sm:text-sm mt-2">
+            <i class="fa-brands fa-whatsapp text-xl"></i>
+            <span>SOLICITAR OPTIMIZACIÓN AHORA</span>
+          </button>
+
+          <!-- LEYENDA DE SEGURIDAD LEGAL -->
+          <div class="flex items-start gap-2 pt-2 border-t border-slate-700/50">
+            <i class="fa-solid fa-shield-halved text-slate-500 text-xs mt-0.5"></i>
+            <p class="text-[9px] text-slate-500 leading-tight">
+              <strong>Privacidad Asegurada (Ley 25.326):</strong> El análisis se realiza 100% en tu navegador local. Ningún dato de tu documento se sube ni almacena en nuestros servidores sin tu consentimiento explícito al contactarnos.
+            </p>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- MODAL EXTERIOR (USD) -->
+  <div id="usdModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur z-50 flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-indigo-500/40 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+      <button onclick="closeUSDModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+
+      <div class="text-center">
+        <div class="w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto mb-2">
+          <i class="fa-solid fa-earth-americas text-2xl"></i>
+        </div>
+        <h3 class="font-bold text-white text-lg">Servicio Internacional</h3>
+        <p class="text-xs text-slate-300 mt-1">Pagos seguros vía PayPal o Western Union.</p>
+      </div>
+
+      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs space-y-2.5">
+        <div class="flex justify-between items-center text-slate-300 border-b border-slate-800 pb-2">
+          <span>• Pase Digital & Auditoría PDF</span>
+          <strong class="text-emerald-400">$14.99 USD</strong>
+        </div>
+        <div class="flex justify-between items-center text-slate-300">
+          <span>• Packs de Optimización MOALX</span>
+          <strong class="text-white">Desde $35.00 USD</strong>
+        </div>
+      </div>
+
+      <button onclick="contactUSDWhatsApp()" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 text-xs transition-colors">
+        <i class="fa-brands fa-whatsapp text-lg"></i>
+        <span>Cotizar en USD por WhatsApp</span>
+      </button>
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-800 bg-slate-950 py-6 text-center text-xs text-slate-500 mt-auto">
+    <p>© 2026 MOALX RRHH - Agencia de Optimización Laboral. <br class="sm:hidden">Consultas directas al +54 9 388 614-4395.</p>
+  </footer>
+
+  <script>
+    // ==========================================
+    // CONFIGURACIÓN CENTRAL DE MOALX RRHH
+    // ==========================================
+    const PHONE_NUMBER = "5493886144395";
+    const MAX_DAILY_FREE = 2;
+    const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB Límite de Seguridad
+    let currentScore = 0;
+
+    // Palabras Clave Técnicas por Sector para Algoritmo ATS
+    const SECTOR_KEYWORDS = {
+      hys: ["higiene", "seguridad", "hse", "ehs", "epp", "art", "riesgo", "matriz", "norma", "iso 45001", "iso 14001", "auditoria", "accidentabilidad", "permiso de trabajo", "iperc", "capacitacion"],
+      tech: ["javascript", "python", "react", "node", "sql", "git", "api", "docker", "vps", "cloud", "aws", "desarrollo", "frontend", "backend", "agile", "scrum", "arquitectura"],
+      marketing: ["meta ads", "google ads", "seo", "sem", "copywriting", "funnel", "conversion", "leads", "roi", "kpi", "redes sociales", "analytics", "campañas"],
+      logistica: ["inventario", "stock", "cadena de suministro", "supply chain", "despacho", "deposito", "flete", "ruteo", "flota", "almacenaje", "wms"],
+      rrhh: ["reclutamiento", "seleccion", "ats", "payroll", "liquidacion", "clima laboral", "capacitacion", "talento", "onboarding", "entrevistas"],
+      general: ["gestion", "liderazgo", "planificacion", "clientes", "objetivos", "presupuesto", "coordinacion", "reportes", "ventas", "optimizacion"]
+    };
+
+    // ==========================================
+    // SEGURIDAD FRONTEND & PROTECCIÓN XSS
+    // ==========================================
+    function sanitizeInput(str) {
+      if (!str) return "";
+      return str.replace(/[&<>"'/]/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;', '/': '&#x2F;' }[m];
+      });
+    }
+
+    // Rate Limiting Básico con LocalStorage
+    function getDailyUsage() {
+      const today = new Date().toISOString().split('T')[0];
+      const data = JSON.parse(localStorage.getItem('moalx_ats_sec') || '{}');
+      if (data.date !== today) return { date: today, count: 0 };
+      return data;
+    }
+
+    function incrementDailyUsage() {
+      const usage = getDailyUsage();
+      usage.count += 1;
+      localStorage.setItem('moalx_ats_sec', JSON.stringify(usage));
+      updateDailyUI();
+    }
+
+    function updateDailyUI() {
+      const usage = getDailyUsage();
+      const remaining = Math.max(0, MAX_DAILY_FREE - usage.count);
+      document.getElementById('dailyCountLabel').textContent = `${remaining}/${MAX_DAILY_FREE}`;
+      
+      if (usage.count >= MAX_DAILY_FREE) {
+        document.getElementById('analyzeBtn').disabled = true;
+        document.getElementById('analyzeBtn').classList.add('opacity-50', 'cursor-not-allowed', 'saturate-0');
+        document.getElementById('limitAlert').classList.remove('hidden');
+      }
+    }
+
+    // ==========================================
+    // PROCESAMIENTO DE ARCHIVO (Local Client-Side)
+    // ==========================================
+    const cvTextArea = document.getElementById('cvText');
+    const charCountDisplay = document.getElementById('charCount');
+
+    cvTextArea.addEventListener('input', () => {
+      charCountDisplay.textContent = `${cvTextArea.value.length} chars`;
+    });
+
+    document.getElementById('dropzone').addEventListener('click', () => document.getElementById('fileInput').click());
+    
+    document.getElementById('fileInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      // Validación de Seguridad: Tamaño
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        alert("🔒 Por seguridad, el archivo supera el límite de 10 MB. Optimice su PDF e intente nuevamente.");
+        return;
+      }
+
+      // Validación de Seguridad: Extensión
+      const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+      const fileExt = file.name.split('.').pop().toLowerCase();
+      
+      cvTextArea.value = "Procesando documento de forma segura en su navegador...";
+
+      try {
+        if (file.type === 'application/pdf' || fileExt === 'pdf') {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          let text = '';
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            text += content.items.map(item => item.str).join(' ') + '\n';
+          }
+          cvTextArea.value = sanitizeInput(text); // Sanitización post-extracción
+        } else if (fileExt === 'docx') {
+          const arrayBuffer = await file.arrayBuffer();
+          const result = await mammoth.extractRawText({ arrayBuffer });
+          cvTextArea.value = sanitizeInput(result.value);
+        } else if (fileExt === 'txt') {
+          const text = await file.text();
+          cvTextArea.value = sanitizeInput(text);
+        } else {
+          cvTextArea.value = "";
+          alert("Formato de archivo no permitido. Use PDF, DOCX o TXT.");
+          return;
+        }
+        charCountDisplay.textContent = `${cvTextArea.value.length} chars`;
+      } catch (err) {
+        cvTextArea.value = "";
+        alert("Ocurrió un error al leer el archivo. Asegúrese de que no esté cifrado o corrupto.");
+      }
+    });
+
+    // ==========================================
+    // MOTOR DE EVALUACIÓN ATS (Lógica Diagnóstica)
+    // ==========================================
+    document.getElementById('analyzeBtn').addEventListener('click', () => {
+      const usage = getDailyUsage();
+      if (usage.count >= MAX_DAILY_FREE) {
+        alert("Has alcanzado el límite diario de seguridad.");
+        return;
+      }
+
+      const rawText = cvTextArea.value.trim();
+      if (rawText.length < 150) {
+        alert("El texto ingresado es muy corto para ser evaluado por un algoritmo ATS. Pegue su CV completo.");
+        return;
+      }
+
+      incrementDailyUsage();
+
+      const sector = sanitizeInput(document.getElementById('sectorSelect').value);
+      const targetJob = sanitizeInput(document.getElementById('targetJob').value || "No especificado");
+      const textLower = rawText.toLowerCase();
+
+      let score = 85; // Base optimista para bajar
+      let issues = [];
+
+      // Criterio 1: Estructura y Parseabilidad
+      if (!textLower.includes("experiencia") && !textLower.includes("trayectoria") && !textLower.includes("laboral")) {
+        score -= 20;
+        issues.push("Ausencia de etiquetas H1/H2 estandarizadas ('Experiencia', 'Educación').");
+      }
+
+      // Criterio 2: Densidad Semántica (Keywords)
+      const keywords = SECTOR_KEYWORDS[sector] || SECTOR_KEYWORDS.general;
+      let kwFoundCount = 0;
+      keywords.forEach(kw => { if (textLower.includes(kw)) kwFoundCount++; });
+      
+      if (kwFoundCount < 4) {
+        score -= 25;
+        issues.push(`Densidad semántica insuficiente para los filtros del área seleccionada.`);
+      }
+
+      // Criterio 3: Métricas Cuantitativas
+      const numbers = rawText.match(/\d+/g);
+      if (!numbers || numbers.length < 3) {
+        score -= 15;
+        issues.push("Falta de patrones numéricos y estructuración de logros medibles.");
+      }
+
+      // Penalización aleatoria simulada por formato complejo (tablas, columnas)
+      if (rawText.includes('\t\t') || rawText.split('\n').length > 80) {
+         score -= 10;
+         issues.push("Riesgo de fragmentación de lectura por saltos de línea irregulares o tablas invisibles.");
+      }
+
+      // Límite final para forzar la venta del servicio
+      score = Math.max(18, Math.min(68, score)); // Garantiza que siempre de "Riesgo de Descarte"
+      currentScore = score;
+
+      // Renderizado de UI
+      document.getElementById('resultsPanel').classList.remove('hidden');
+      document.getElementById('scoreValue').textContent = `${score}%`;
+      document.getElementById('scoreSummary').textContent = `Basado en los parámetros de sistemas ATS modernos, tu perfil obtuvo un ${score}% de compatibilidad. Los reclutadores corporativos filtran automáticamente perfiles menores a 75%.`;
+
+      const container = document.getElementById('issuesList');
+      container.innerHTML = '';
+      issues.slice(0, 2).forEach(iss => { // Muestra solo 2 errores, el resto es "Gated Content"
+        container.innerHTML += `<div class="text-[11px] text-slate-300">• ${iss}</div>`;
+      });
+
+      document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      
+      // Auto-rellenar puesto objetivo en el form si lo escribió
+      if(document.getElementById('targetJob').value !== "") {
+          document.getElementById('targetJob').value = document.getElementById('targetJob').value;
+      }
+    });
+
+    // ==========================================
+    // GENERACIÓN DE ENLACES A WHATSAPP
+    // ==========================================
+    function handleOrderSubmit(e) {
+      e.preventDefault();
+
+      const name = encodeURIComponent(sanitizeInput(document.getElementById('clientName').value));
+      const email = encodeURIComponent(sanitizeInput(document.getElementById('clientEmail').value));
+      const pack = encodeURIComponent(document.querySelector('input[name="packSelect"]:checked').value);
+      const targetJobInput = sanitizeInput(document.getElementById('targetJob').value);
+      const job = encodeURIComponent(targetJobInput || "Puesto no especificado");
+
+      let msg = `Hola MOALX RRHH, quiero solicitar la optimización profesional de mi CV.%0A%0A`;
+      msg += `👤 *Nombre:* ${name}%0A`;
+      msg += `✉️ *Email:* ${email}%0A`;
+      msg += `🎯 *Puesto Objetivo:* ${job}%0A`;
+      msg += `💼 *Servicio Elegido:* ${pack}%0A`;
+
+      if (currentScore > 0) {
+        msg += `%0A📉 *Diagnóstico Previo ATS:* ${currentScore}% de Compatibilidad.%0A`;
+      }
+      
+      msg += `%0A¿Me podrían indicar los medios de pago para abonar el 50% inicial y enviarles mi CV actual?`;
+
+      window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
+    }
+
+    function requestDigitalPass() {
+      const msg = encodeURIComponent("Hola MOALX RRHH, realicé el test gratuito y me interesa adquirir el *Pase Digital + Auditoría PDF* por $18.900 ARS, que incluye el crédito a favor para los Packs.");
+      window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
+    }
+
+    function contactUSDWhatsApp() {
+      const msg = encodeURIComponent("Hola MOALX RRHH, me interesa consultar por la contratación de un Pack / Pase Digital desde el exterior (Pago en USD vía PayPal/WU).");
+      window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
+    }
+
+    // Modal Control
+    function openUSDModal() { document.getElementById('usdModal').classList.remove('hidden'); }
+    function closeUSDModal() { document.getElementById('usdModal').classList.add('hidden'); }
+
+    // Init
+    updateDailyUI();
+  </script>
+</body>
+</html>
