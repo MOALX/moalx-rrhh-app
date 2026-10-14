@@ -14,7 +14,7 @@
 </head>
 <body class="bg-[#0B0F19] text-slate-100 min-h-screen flex flex-col font-sans select-none selection:bg-orange-500/30">
 
-  <!-- BANNER PROMOCIONAL (Brand Naranja) -->
+  <!-- BANNER PROMOCIONAL -->
   <div class="bg-gradient-to-r from-orange-950 via-[#0B0F19] to-[#0B0F19] border-b border-orange-500/30 py-2.5 px-4 text-center text-xs sm:text-sm text-orange-200 flex items-center justify-center gap-2 flex-wrap shadow-md">
     <span class="bg-orange-500/20 text-orange-400 font-bold px-2 py-0.5 rounded border border-orange-500/40">MOALX RRHH</span>
     <span class="text-slate-300">Superá los filtros digitales y multiplicá tus entrevistas.</span>
@@ -24,7 +24,9 @@
   <!-- HEADER -->
   <header class="border-b border-slate-800 bg-[#0B0F19]/90 backdrop-blur sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
+      
+      <!-- LOGO CON TRIPLE CLIC SECRETO PARA ADMIN -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogoClick()">
         <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-2 rounded-xl font-black text-xl tracking-wider shadow-lg shadow-orange-600/20 flex items-center justify-center">
           <i class="fa-solid fa-sparkles text-sm mr-1"></i> MOALX
         </div>
@@ -33,9 +35,10 @@
           <p class="text-[10px] sm:text-xs text-slate-400">Diagnóstico Inteligente de CV</p>
         </div>
       </div>
+
       <div class="flex items-center gap-2 sm:gap-3">
-        <!-- BOTÓN CON LLAVE MAESTRA OCULTA -->
-        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700 text-xs cursor-pointer hover:bg-slate-700 transition-colors" onclick="checkAdminShortcut()" title="Info de uso">
+        <!-- INDICADOR DE USO PÚBLICO -->
+        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-1.5 rounded-full border border-slate-700 text-xs">
           <i id="usageIcon" class="fa-solid fa-bolt text-orange-400"></i>
           <span>Gratis hoy: <strong id="dailyCountLabel" class="text-orange-400">2/2</strong></span>
         </div>
@@ -110,7 +113,7 @@
         </div>
       </div>
 
-      <!-- INFORME DIAGNÓSTICO -->
+      <!-- INFORME DIAGNÓSTICO EN TEXTO PLANO -->
       <div id="resultsPanel" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl border-t-4 border-t-red-500">
         
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -125,26 +128,26 @@
 
         <p id="scoreSummary" class="text-xs text-slate-300 leading-relaxed font-medium"></p>
 
-        <!-- Desglose de Análisis -->
+        <!-- OBSERVACIONES CUALITATIVAS EN TEXTO PLANO -->
         <div class="space-y-3 bg-[#0B0F19]/60 p-4 rounded-xl border border-slate-800">
           <h3 class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <i class="fa-solid fa-chart-simple text-orange-500"></i> Desglose de Lectura Algorítmica:
+            <i class="fa-solid fa-file-lines text-orange-500"></i> Observaciones Generales del Escaneo:
           </h3>
-          <div id="issuesList" class="space-y-3"></div>
+          <div id="issuesList" class="space-y-2 text-xs text-slate-300"></div>
         </div>
 
-        <!-- GATED CONTENT: Error Crítico Bloqueado -->
+        <!-- GATED CONTENT: Auditoría Completa Bloqueada -->
         <div class="bg-gradient-to-r from-red-950/30 via-[#0B0F19] to-[#0B0F19] border border-red-500/20 rounded-xl p-4 space-y-2 relative shadow-inner">
           <div class="flex items-center gap-2 text-red-400 font-bold text-xs">
             <i class="fa-solid fa-lock text-sm"></i>
-            <span>ERROR CRÍTICO N° 3 (BLOQUEADO)</span>
+            <span>AUDITORÍA COMPLETA Y RECOMENDACIONES (BLOQUEADO)</span>
           </div>
           <p class="text-[11px] text-slate-300 leading-normal blur-[1.5px] select-none">
-            Se detectó un fallo estructural severo en el encabezado y en la densidad semántica de experiencia. Este error provoca el descarte automático en portales como Computrabajo, LinkedIn y sistemas de reclutamiento corporativo.
+            Se detectó un fallo estructural severo en el encabezado y en la densidad semántica de experiencia. La lista exacta de palabras clave faltantes y el modelo de reescritura técnica se encuentran reservados.
           </p>
           <div class="absolute inset-0 bg-[#0B0F19]/60 flex items-center justify-center backdrop-blur-[2px] rounded-xl">
             <a href="#orderForm" class="bg-orange-500 hover:bg-orange-400 text-white font-bold text-xs px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 transition-all">
-              <i class="fa-solid fa-wrench"></i> Solucionar con un Pack
+              <i class="fa-solid fa-wrench"></i> Solucionar con un Pack MOALX
             </a>
           </div>
         </div>
@@ -153,10 +156,10 @@
         <div class="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4 text-xs space-y-2">
           <div class="flex justify-between items-center text-slate-200">
             <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-file-pdf text-orange-500"></i> Pase Digital + Auditoría PDF</span>
-            <span class="text-sm font-black text-white">$18.900 ARS</span>
+            <span class="text-sm font-black text-white">$15.900 ARS</span>
           </div>
           <p class="text-[10px] text-slate-400 leading-relaxed">
-            Obtené el reporte completo de palabras clave faltantes, 15 escaneos por 30 días y el Kit de Plantillas ATS.<br>
+            Obtené el reporte PDF completo con palabras clave faltantes exactas, 15 escaneos por 30 días y el Kit de Plantillas ATS.<br>
             <strong class="text-orange-400">+ Incluye $15.000 ARS de crédito bonificado</strong> para contratar cualquier Pack.
           </p>
           <button onclick="requestDigitalPass()" class="mt-2 w-full border border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white font-bold py-2 rounded-lg transition-colors">
@@ -172,7 +175,6 @@
     <div class="lg:col-span-6 space-y-6">
       <div id="orderForm" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5 relative">
         
-        <!-- Glow accent sutil arriba a la derecha -->
         <div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent opacity-50 rounded-t-2xl"></div>
 
         <div class="border-b border-slate-800 pb-3">
@@ -243,7 +245,6 @@
             <p class="text-[9px] text-slate-500 mt-2">* 50% al iniciar el trabajo y 50% al entregar. Precios para perfiles hasta Ssr.</p>
           </div>
 
-          <!-- BOTÓN WHATSAPP MANTIENE SU COLOR VERDE ORIGINAL POR CONVERSIÓN -->
           <button type="submit" class="w-full bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.99] text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-[#25D366]/20 flex items-center justify-center gap-2 transition-all text-xs sm:text-sm mt-2">
             <i class="fa-brands fa-whatsapp text-xl"></i>
             <span>SOLICITAR OPTIMIZACIÓN AHORA</span>
@@ -298,9 +299,6 @@
   </footer>
 
   <script>
-    // ==========================================
-    // CONFIGURACIÓN CENTRAL DE MOALX RRHH
-    // ==========================================
     const PHONE_NUMBER = "5493886144395";
     const MAX_DAILY_FREE = 2;
     const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
@@ -324,13 +322,27 @@
     }
 
     // ==========================================
-    // SISTEMA DE LLAVE MAESTRA (ADMIN MODE)
+    // CÓDIGO ADMIN OCULTO (URL / TRIPLE CLIC)
     // ==========================================
     function isAdmin() {
       return localStorage.getItem('moalx_admin_mode') === 'true';
     }
 
-    function checkAdminShortcut() {
+    let logoClicks = 0;
+    let logoTimer = null;
+    function handleLogoClick() {
+      logoClicks++;
+      if (logoTimer) clearTimeout(logoTimer);
+
+      if (logoClicks >= 3) {
+        logoClicks = 0;
+        triggerAdminPrompt();
+      } else {
+        logoTimer = setTimeout(() => { logoClicks = 0; }, 1000);
+      }
+    }
+
+    function triggerAdminPrompt() {
       if (isAdmin()) {
         if (confirm("Modo Admin Ilimitado ACTIVO. ¿Deseás desactivarlo?")) {
           localStorage.removeItem('moalx_admin_mode');
@@ -341,11 +353,21 @@
       const pwd = prompt("Ingresá la clave de Administrador MOALX:");
       if (pwd === ADMIN_PASS) {
         localStorage.setItem('moalx_admin_mode', 'true');
-        alert("¡Modo Administrador Ilimitado Activado! 🚀");
-        updateDailyUI();
+        localStorage.removeItem('moalx_ats_sec');
+        alert("¡Modo Administrador Activado! Se desrestringió la app. 🚀");
+        location.reload();
       } else if (pwd !== null) {
         alert("Clave incorrecta.");
       }
+    }
+
+    // Auto-detección por URL ?admin=1
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('admin') === '1') {
+      setTimeout(() => {
+        triggerAdminPrompt();
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }, 300);
     }
 
     function getDailyUsage() {
@@ -385,9 +407,6 @@
       }
     }
 
-    // ==========================================
-    // PROCESAMIENTO DE ARCHIVOS
-    // ==========================================
     const cvTextArea = document.getElementById('cvText');
     const charCountDisplay = document.getElementById('charCount');
 
@@ -439,9 +458,7 @@
       }
     });
 
-    // ==========================================
-    // MOTOR ATS: EVALUACIÓN Y DESGLOSE VISUAL
-    // ==========================================
+    // MOTOR ATS
     document.getElementById('analyzeBtn').addEventListener('click', () => {
       const usage = getDailyUsage();
       if (!isAdmin() && usage.count >= MAX_DAILY_FREE) {
@@ -463,98 +480,57 @@
       let structScore = 85;
       let kwScore = 70;
       let metricScore = 65;
-      let issues = [];
 
-      // 1. Estructura
       if (!textLower.includes("experiencia") && !textLower.includes("educacion") && !textLower.includes("trayectoria")) {
         structScore -= 30;
-        issues.push("Falta de encabezados estandarizados (Lectura de secciones dificultosa).");
-      } else {
-        issues.push("Estructura general parseable por algoritmos de selección.");
       }
 
-      // 2. Palabras Clave
       const keywords = SECTOR_KEYWORDS[sector] || SECTOR_KEYWORDS.general;
       let kwFoundCount = 0;
       keywords.forEach(kw => { if (textLower.includes(kw)) kwFoundCount++; });
-      
-      if (kwFoundCount < 4) {
-        kwScore = 40;
-        issues.push("Densidad de vocabulario técnico baja para el sector seleccionado.");
-      } else {
-        kwScore = 80;
-        issues.push("Vocabulario base detectado correctamente.");
-      }
+      if (kwFoundCount < 4) { kwScore = 40; } else { kwScore = 80; }
 
-      // 3. Métricas
       const numbers = rawText.match(/\d+/g);
-      if (!numbers || numbers.length < 3) {
-        metricScore = 35;
-        issues.push("Ausencia de métricas cuantitativas o logros medibles (% o números).");
-      } else {
-        metricScore = 75;
-      }
+      if (!numbers || numbers.length < 3) { metricScore = 35; } else { metricScore = 75; }
 
-      // Puntaje Global Calculado
       let overallScore = Math.round((structScore + kwScore + metricScore) / 3);
       overallScore = Math.max(25, Math.min(72, overallScore));
       currentScore = overallScore;
 
-      // Renderizado UI - AQUI SE ACTUALIZÓ EL TEXTO AL 85%
       document.getElementById('resultsPanel').classList.remove('hidden');
       document.getElementById('scoreValue').textContent = `${overallScore}%`;
       document.getElementById('scoreSummary').textContent = `Basado en los parámetros de sistemas ATS modernos, tu perfil obtuvo un ${overallScore}% de compatibilidad. Los reclutadores corporativos filtran automáticamente perfiles menores a 85%.`;
 
-      // Inyección del Desglose en Barras
       const container = document.getElementById('issuesList');
       container.innerHTML = `
-        <div class="space-y-2.5 mb-3">
-          <div>
-            <div class="flex justify-between text-[11px] text-slate-300 font-semibold mb-1">
-              <span>Estructura y Parseabilidad</span>
-              <span class="${structScore < 60 ? 'text-red-400' : 'text-orange-400'}">${structScore}%</span>
-            </div>
-            <div class="w-full bg-[#0B0F19] rounded-full h-1.5 border border-slate-800">
-              <div class="bg-orange-500 h-1.5 rounded-full" style="width: ${structScore}%"></div>
-            </div>
+        <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-slate-200 flex items-center justify-between">
+            <span>• Estructura y Legibilidad Algorítmica</span>
+            <span class="${structScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${structScore < 60 ? 'Deficiente' : 'Aceptable'}</span>
           </div>
-
-          <div>
-            <div class="flex justify-between text-[11px] text-slate-300 font-semibold mb-1">
-              <span>Densidad Semántica (Keywords)</span>
-              <span class="${kwScore < 60 ? 'text-red-400' : 'text-orange-400'}">${kwScore}%</span>
-            </div>
-            <div class="w-full bg-[#0B0F19] rounded-full h-1.5 border border-slate-800">
-              <div class="bg-orange-500 h-1.5 rounded-full" style="width: ${kwScore}%"></div>
-            </div>
-          </div>
-
-          <div>
-            <div class="flex justify-between text-[11px] text-slate-300 font-semibold mb-1">
-              <span>Métricas e Impacto Cuantitativo</span>
-              <span class="${metricScore < 60 ? 'text-red-400' : 'text-orange-400'}">${metricScore}%</span>
-            </div>
-            <div class="w-full bg-[#0B0F19] rounded-full h-1.5 border border-slate-800">
-              <div class="bg-orange-500 h-1.5 rounded-full" style="width: ${metricScore}%"></div>
-            </div>
-          </div>
+          <p class="text-[11px] text-slate-400 leading-normal">${structScore < 60 ? 'Se detectaron encabezados ambiguos o no estandarizados que dificultan la extracción automática de experiencia y formación.' : 'Estructura general reconocida por el algoritmo, pero con inconsistencias menores en la jerarquía de secciones.'}</p>
         </div>
 
-        <div class="space-y-1 pt-2 border-t border-slate-800">
-          ${issues.map(iss => `<div class="text-[11px] text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-check text-orange-500 text-[10px]"></i> ${iss}</div>`).join('')}
+        <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-slate-200 flex items-center justify-between">
+            <span>• Densidad Semántica (Vocabulario del Sector)</span>
+            <span class="${kwScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${kwScore < 60 ? 'Baja Densidad' : 'Regular'}</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-normal">${kwScore < 60 ? 'Escasa presencia de términos técnicos y competencias normativas clave requeridas de manera estándar para este puesto.' : 'Contiene vocabulario base, pero carece de combinaciones semánticas avanzadas de alto impacto.'}</p>
+        </div>
+
+        <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-slate-200 flex items-center justify-between">
+            <span>• Medición de Impacto y Logros Medibles</span>
+            <span class="${metricScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${metricScore < 60 ? 'Sin Métricas' : 'Moderado'}</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-normal">${metricScore < 60 ? 'Baja proporción de indicadores cuantitativos (% o cifras). El documento se lee descriptivo y no orientado a resultados.' : 'Presencia moderada de números, pero sin encuadre de logros cuantitativos relevantes.'}</p>
         </div>
       `;
 
       document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      
-      if(document.getElementById('targetJob').value !== "") {
-          document.getElementById('targetJob').value = document.getElementById('targetJob').value;
-      }
     });
 
-    // ==========================================
-    // INTEGRACIÓN WHATSAPP Y MODALES
-    // ==========================================
     function handleOrderSubmit(e) {
       e.preventDefault();
 
@@ -580,7 +556,7 @@
     }
 
     function requestDigitalPass() {
-      const msg = encodeURIComponent("Hola MOALX RRHH, realicé el test gratuito y me interesa adquirir el *Pase Digital + Auditoría PDF* por $18.900 ARS, que incluye el crédito a favor para los Packs.");
+      const msg = encodeURIComponent("Hola MOALX RRHH, realicé el test gratuito y me interesa adquirir el *Pase Digital + Auditoría PDF* por $15.900 ARS, que incluye el crédito a favor para los Packs.");
       window.open(`https://wa.me/${PHONE_NUMBER}?text=${msg}`, '_blank');
     }
 
