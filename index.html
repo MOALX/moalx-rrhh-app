@@ -25,7 +25,7 @@
   <header class="border-b border-slate-800 bg-[#0B0F19]/90 backdrop-blur sticky top-0 z-40">
     <div class="max-w-6xl mx-auto px-4 py-3.5 flex items-center justify-between">
       
-      <!-- LOGO MOALX (Sin acceso oculto de clics) -->
+      <!-- LOGO MOALX -->
       <div class="flex items-center gap-3">
         <div class="bg-gradient-to-br from-orange-500 to-orange-600 text-white p-2 rounded-xl font-black text-xl tracking-wider shadow-lg shadow-orange-600/20 flex items-center justify-center">
           <i class="fa-solid fa-sparkles text-sm mr-1"></i> MOALX
@@ -65,21 +65,27 @@
         </h2>
         <p class="text-xs text-slate-400 mb-2">Comprobá cómo lee tu CV el software de Recursos Humanos.</p>
 
-        <!-- SECTOR Y PUESTO OBJETIVO -->
+        <!-- SECTOR Y PUESTO OBJETIVO (12 ÁREAS) -->
         <div class="grid grid-cols-1 gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-300 mb-1.5">Área o Sector Laboral:</label>
             <select id="sectorSelect" class="w-full bg-[#0B0F19] border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-orange-500">
               <option value="hys">Higiene, Seguridad Laboral & Medio Ambiente (HSE)</option>
+              <option value="mineria">Minería, Geología & Operaciones de Yacimiento</option>
+              <option value="oilgas">Oil & Gas, Energía & Petroquímica</option>
+              <option value="ingenieria">Ingeniería, Mantenimiento & Infraestructura</option>
               <option value="tech">Tecnología, Sistemas & Software (IT)</option>
-              <option value="marketing">Marketing Digital & Ventas</option>
-              <option value="logistica">Logística, Operaciones & Cadena de Suministro</option>
-              <option value="rrhh">Recursos Humanos & Selección</option>
-              <option value="general" selected>General / Administración / Comercial</option>
+              <option value="logistica">Logística, Operaciones, Depósito & Cadena de Suministro</option>
+              <option value="administracion">Administración, Finanzas, Contabilidad & Auditoría</option>
+              <option value="rrhh">Recursos Humanos, Selección & Relaciones Laborales</option>
+              <option value="marketing">Marketing Digital, Ventas & Comercial</option>
+              <option value="salud">Salud, Farmacéutica & Laboratorio</option>
+              <option value="produccion">Producción Industrial, Planta & Oficios Técnicos</option>
+              <option value="general" selected>General / Multisectorial / Administración</option>
             </select>
           </div>
           <div>
-            <input type="text" id="targetJob" placeholder="Puesto exacto al que aplicás (Ej: Inspector HSE, Gerente...)" class="w-full bg-[#0B0F19] border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-orange-500" />
+            <input type="text" id="targetJob" placeholder="Puesto exacto al que aplicás (Ej: Inspector HSE, Técnico Minero, Gerente...)" class="w-full bg-[#0B0F19] border border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-orange-500" />
           </div>
         </div>
 
@@ -113,7 +119,7 @@
         </div>
       </div>
 
-      <!-- INFORME DIAGNÓSTICO PERSUASIVO -->
+      <!-- INFORME DIAGNÓSTICO PERSUASIVO DE 6 EJES -->
       <div id="resultsPanel" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-xl border-t-4 border-t-red-500">
         
         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
@@ -122,16 +128,16 @@
             <div id="scoreValue" class="text-4xl font-black text-red-400">0%</div>
           </div>
           <div class="text-right">
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30">RIESGO DE DESCARTE</span>
+            <span id="scoreBadge" class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30">RIESGO DE DESCARTE</span>
           </div>
         </div>
 
         <p id="scoreSummary" class="text-xs text-slate-300 leading-relaxed font-medium"></p>
 
-        <!-- DIAGNÓSTICO EN 4 EJES PERSUASIVOS -->
+        <!-- DIAGNÓSTICO EN 6 EJES PERSUASIVOS -->
         <div class="space-y-3 bg-[#0B0F19]/60 p-4 rounded-xl border border-slate-800">
           <h3 class="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-            <i class="fa-solid fa-file-lines text-orange-500"></i> Diagnóstico de Compatibilidad Laboral:
+            <i class="fa-solid fa-file-lines text-orange-500"></i> Auditoría de Compatibilidad Laboral (6 Ejes):
           </h3>
           <div id="issuesList" class="space-y-2.5 text-xs text-slate-300"></div>
         </div>
@@ -287,17 +293,72 @@
     const PHONE_NUMBER = "5493886144395";
     const MAX_DAILY_FREE = 2;
     const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
-    const ADMIN_PASS = "fabianflash1994"; // <--- NUEVA CONTRASEÑA ADMIN
+    const ADMIN_PASS = "fabianflash1994";
     let currentScore = 0;
-
-    const SECTOR_KEYWORDS = {
-      hys: ["higiene", "seguridad", "hse", "ehs", "epp", "art", "riesgo", "matriz", "norma", "iso 45001", "iso 14001", "auditoria", "accidentabilidad", "permiso de trabajo", "iperc", "capacitacion"],
-      tech: ["javascript", "python", "react", "node", "sql", "git", "api", "docker", "vps", "cloud", "aws", "desarrollo", "frontend", "backend", "agile", "scrum", "arquitectura"],
-      marketing: ["meta ads", "google ads", "seo", "sem", "copywriting", "funnel", "conversion", "leads", "roi", "kpi", "redes sociales", "analytics", "campañas"],
-      logistica: ["inventario", "stock", "cadena de suministro", "supply chain", "despacho", "deposito", "flete", "ruteo", "flota", "almacenaje", "wms"],
-      rrhh: ["reclutamiento", "seleccion", "ats", "payroll", "liquidacion", "clima laboral", "capacitacion", "talento", "onboarding", "entrevistas"],
-      general: ["gestion", "liderazgo", "planificacion", "clientes", "objetivos", "presupuesto", "coordinacion", "reportes", "ventas", "optimizacion"]
+    let currentAxisStatus = {
+      axis1: "No Evaluado",
+      axis2: "No Evaluado",
+      axis3: "No Evaluado",
+      axis4: "No Evaluado",
+      axis5: "No Evaluado",
+      axis6: "No Evaluado"
     };
+
+    // DICCIONARIO EXPANDIDO Y PROFESIONAL POR SECTOR
+    const SECTOR_KEYWORDS = {
+      hys: [
+        "ley 19.587", "ley 19587", "decreto 351", "decreto 911", "decreto 249", "decreto 248", "resolución", "srt", "art", "iso 45001", "iso 14001", "iso 9001", "ohsas", "iram",
+        "iperc", "aro", "art", "loto", "pts", "permiso de trabajo", "ast", "matriz de riesgo", "epp", "elementos de protección", "auditoría", "inspección", "fiscalización", "investigación", "causa raíz", "árbol de causas",
+        "ergonomía", "carga de fuego", "evacuación", "simulacro", "contingencia", "incendio", "extinción", "ambiental", "residuos", "efluentes", "impacto ambiental", "ruido", "iluminación", "contaminantes",
+        "capacitación", "inducción", "charla", "rcp", "primeros auxilios", "accidentabilidad", "siniestralidad", "índices", "estadísticas", "cultura preventiva", "sso", "hse", "ehs", "syso"
+      ],
+      mineria: [
+        "yacimiento", "perforación", "voladura", "chancado", "flotación", "lixiviación", "relaves", "dique", "geología", "cateo", "prospección", "topografía", "roster", "guardia", "campamento", "faena", "minado", "tajo abierto", "cielo abierto", "subterránea", "pique", "socavón", "mineral", "sondaje", "litio", "cobre", "oro", "plata", "metalurgia", "salar", "muestreo", "core", "testigos", "geotecnia", "ley de corte"
+      ],
+      oilgas: [
+        "upstream", "midstream", "downstream", "pozo", "torre", "rig", "perforación", "terminación", "pulling", "workover", "wireline", "fractura", "estimulación", "yacimiento", "refinería", "gasoducto", "oleoducto", "petroquímica", "scada", "dcs", "instrumentación", "válvulas", "bridas", "bombeo", "vaca muerta", "offshore", "onshore", "cuenca", "petróleo", "gas", "hidrocarburos", "sísmica", "boca de pozo"
+      ],
+      ingenieria: [
+        "autocad", "revit", "solidworks", "civil 3d", "sap2000", "project", "primavera", "rcm", "tpm", "pdca", "5s", "lean", "six sigma", "mantenimiento preventivo", "mantenimiento correctivo", "mantenimiento predictivo", "obra civil", "electromecánica", "hvac", "piping", "pliegos", "licitaciones", "cómputo", "presupuesto", "pmp", "bim", "cálculo estructural", "hormigón", "acero", "topografía", "automatización", "plc"
+      ],
+      tech: [
+        "javascript", "python", "java", "c#", "c++", "ruby", "php", "react", "angular", "vue", "node", "express", "django", "spring", "sql", "mysql", "postgresql", "mongodb", "nosql", "git", "github", "gitlab", "docker", "kubernetes", "aws", "azure", "gcp", "cloud", "linux", "bash", "agile", "scrum", "kanban", "jira", "ci/cd", "api", "rest", "graphql", "microservicios", "frontend", "backend", "fullstack", "qa", "testing"
+      ],
+      logistica: [
+        "supply chain", "cadena de suministro", "logística", "almacén", "depósito", "inventario", "stock", "wms", "tms", "erp", "sap", "picking", "packing", "cross docking", "ruteo", "flete", "última milla", "montacargas", "autoelevador", "kpi", "fifo", "lifo", "abastecimiento", "compras", "proveedores", "aduana", "comex", "importación", "exportación", "incoterms", "despacho", "flota", "trazabilidad"
+      ],
+      administracion: [
+        "contabilidad", "finanzas", "tesorería", "auditoría", "balances", "estados contables", "conciliación bancaria", "flujo de caja", "cash flow", "facturación", "cobranzas", "pagos", "impuestos", "afip", "liquidación", "iva", "ingresos brutos", "ganancias", "excel", "tablas dinámicas", "macros", "erp", "sap", "tango", "bejerman", "presupuesto", "forecast", "proveedores", "clientes", "bancos", "asientos"
+      ],
+      rrhh: [
+        "reclutamiento", "selección", "headhunting", "it recruiter", "onboarding", "inducción", "clima laboral", "cultura", "desempeño", "kpi", "capacitación", "training", "payroll", "liquidación de sueldos", "cargas sociales", "f931", "sindicatos", "convenios", "lct", "ley de contrato de trabajo", "art", "compensaciones", "beneficios", "ausentismo", "retención", "talento", "entrevistas", "assessment", "psicotécnico"
+      ],
+      marketing: [
+        "marketing digital", "seo", "sem", "google ads", "meta ads", "facebook ads", "tiktok ads", "social media", "community management", "content", "copywriting", "inbound", "email marketing", "mailchimp", "crm", "hubspot", "salesforce", "leads", "embudo", "funnel", "roi", "roas", "kpi", "analítica", "google analytics", "e-commerce", "b2b", "b2c", "branding", "conversión", "pauta", "campañas"
+      ],
+      salud: [
+        "medicina", "enfermería", "clínica", "hospital", "sanatorio", "historia clínica", "pacientes", "triage", "rcp", "acls", "bls", "anmat", "farmacovigilancia", "vademécum", "laboratorio", "muestras", "hisopado", "análisis", "aparatología", "quirófano", "bioseguridad", "epidemiología", "guardia", "internación", "ambulatorio", "obras sociales", "prepaga", "auditoría médica"
+      ],
+      produccion: [
+        "planta", "línea de producción", "manufactura", "operario", "técnico", "cnc", "inyección", "extrusión", "matricería", "soldadura", "tig", "mig", "mag", "smaw", "tornería", "fresado", "mantenimiento", "tpm", "lean", "5s", "iso 9001", "calidad", "control de calidad", "mejora continua", "mermas", "scrap", "productividad", "eficiencia", "oee", "turnos", "rotativo"
+      ],
+      general: [
+        "gestión", "coordinación", "planificación", "organización", "estrategia", "liderazgo", "resolución", "atención al cliente", "reclamos", "pqrs", "ventas", "comercial", "b2b", "b2c", "kpi", "objetivos", "metas", "reportes", "informes", "excel", "paquete office", "word", "powerpoint", "comunicación", "negociación", "supervisión", "desarrollo", "implementación"
+      ]
+    };
+
+    const ACTION_VERBS = [
+      "lideré", "lidero", "lideró", "gestioné", "gestiono", "gestionó", "coordiné", "coordino", "coordinó",
+      "implementé", "implemento", "implementó", "supervisé", "superviso", "supervisó", "optimizó", "optimizé",
+      "optimizo", "diseñé", "diseño", "diseñó", "ejecuté", "ejecuto", "ejecutó", "desarrollé", "desarrollo",
+      "desarrolló", "reduje", "redujo", "incrementé", "incrementó", "logré", "logró", "audité", "auditó"
+    ];
+
+    const SOFT_SKILLS_TERMS = [
+      "trabajo en equipo", "liderazgo", "comunicación", "resolución de problemas", "adaptabilidad",
+      "pensamiento crítico", "negociación", "proactividad", "organización", "orientación a resultados",
+      "trabajo bajo presión", "relaciones interpersonales", "toma de decisiones"
+    ];
 
     function sanitizeInput(str) {
       if (!str) return "";
@@ -307,7 +368,7 @@
     }
 
     // ==========================================
-    // CÓDIGO ADMIN OCULTO (SOLO POR URL ?admin=1)
+    // MODO ADMIN EXCLUSIVO POR URL ?admin=1
     // ==========================================
     function isAdmin() {
       return localStorage.getItem('moalx_admin_mode') === 'true';
@@ -332,19 +393,14 @@
       }
     }
 
-    // Auto-detección exclusiva por URL ?admin=1
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('admin') === '1') {
       setTimeout(() => {
         triggerAdminPrompt();
-        // Limpia la URL para no dejar rastro
         window.history.replaceState({}, document.title, window.location.pathname);
       }, 300);
     }
 
-    // ==========================================
-    // GESTIÓN DE USO Y LÍMITES
-    // ==========================================
     function getDailyUsage() {
       const today = new Date().toISOString().split('T')[0];
       const data = JSON.parse(localStorage.getItem('moalx_ats_sec') || '{}');
@@ -382,9 +438,6 @@
       }
     }
 
-    // ==========================================
-    // MANEJO DE ARCHIVOS
-    // ==========================================
     const cvTextArea = document.getElementById('cvText');
     const charCountDisplay = document.getElementById('charCount');
 
@@ -437,7 +490,7 @@
     });
 
     // ==========================================
-    // MOTOR ATS - DIAGNÓSTICO EN 4 EJES PERSUASIVOS
+    // MOTOR ATS REAL DE 6 EJES DINÁMICOS
     // ==========================================
     document.getElementById('analyzeBtn').addEventListener('click', () => {
       const usage = getDailyUsage();
@@ -447,90 +500,256 @@
       }
 
       const rawText = cvTextArea.value.trim();
+      const textLength = rawText.length;
+
+      // REGLA DEL 0% (DOCUMENTO IMAGEN / CANVA SIN CAPA DE TEXTO)
+      if (textLength < 80) {
+        incrementDailyUsage();
+        currentScore = 0;
+        currentAxisStatus = {
+          axis1: "No Procesable (Imagen / Canva)",
+          axis2: "Bloqueado",
+          axis3: "Bloqueado",
+          axis4: "Bloqueado",
+          axis5: "Bloqueado",
+          axis6: "Bloqueado"
+        };
+
+        document.getElementById('resultsPanel').classList.remove('hidden');
+        document.getElementById('scoreValue').textContent = `0%`;
+        document.getElementById('scoreValue').className = "text-4xl font-black text-red-500";
+        
+        const scoreBadgeElem = document.getElementById('scoreBadge');
+        scoreBadgeElem.className = "text-[10px] font-bold px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/40";
+        scoreBadgeElem.textContent = "DOCUMENTO NO PROCESABLE";
+
+        document.getElementById('scoreSummary').textContent = "Riesgo Total de Invisibilidad. El software de reclutamiento no pudo extraer una sola línea de texto de tu archivo. Para los motores ATS de las empresas, tu CV no existe y es descartado automáticamente.";
+
+        document.getElementById('issuesList').innerHTML = `
+          <div class="p-4 bg-red-950/40 border border-red-500/40 rounded-xl space-y-2 text-xs text-red-200">
+            <div class="font-bold text-red-400 text-sm flex items-center gap-2">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span>Fallo Crítico: Archivo Guardado como Imagen o Diseño de Canva Incompatible</span>
+            </div>
+            <p class="leading-relaxed text-[11px] text-slate-300">
+              Los programas como Workday, Taleo o Computrabajo leen capas de texto plano. Tu archivo actual consiste en cajas de texto compuestas o imágenes exportadas. Un reclutador corporativo jamás llegará a ver tu perfil porque el sistema lo rechaza en 0.01 segundos.
+            </p>
+          </div>
+        `;
+
+        document.getElementById('resultsPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
       if (rawText.length < 150) {
-        alert("El texto ingresado es muy corto para ser evaluado por un algoritmo ATS. Pegue su CV completo.");
+        alert("El texto ingresado es demasiado corto para ser evaluado por un algoritmo ATS. Pegue su CV completo.");
         return;
       }
 
       incrementDailyUsage();
 
       const sector = sanitizeInput(document.getElementById('sectorSelect').value);
+      const targetJobInput = sanitizeInput(document.getElementById('targetJob').value.trim());
       const textLower = rawText.toLowerCase();
 
-      let structScore = 85;
-      let kwScore = 70;
-      let metricScore = 65;
+      // ==========================================
+      // EVALUACIÓN DE LAS 8 SECCIONES VITALES
+      // ==========================================
+      const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(rawText);
+      const hasPhone = /\+?\d[\d\s\-]{7,}/.test(rawText);
+      const hasExpSection = textLower.includes("experiencia") || textLower.includes("trayectoria") || textLower.includes("laboral") || textLower.includes("puestos");
+      const hasEduSection = textLower.includes("educacion") || textLower.includes("estudios") || textLower.includes("formacion") || textLower.includes("titulo");
+      const hasProfileSection = textLower.includes("perfil") || textLower.includes("resumen") || textLower.includes("objetivo") || textLower.includes("presentacion");
+      const hasHardSkills = textLower.includes("conocimientos") || textLower.includes("herramientas") || textLower.includes("normas") || textLower.includes("software") || textLower.includes("tecnicos");
+      const hasLanguages = textLower.includes("ingles") || textLower.includes("inglés") || textLower.includes("idiomas") || textLower.includes("portugues");
 
-      if (!textLower.includes("experiencia") && !textLower.includes("educacion") && !textLower.includes("trayectoria")) {
-        structScore -= 30;
+      // 1. EJE 1: PARSEABILIDAD TÉCNICA Y ESTRUCTURA (0 a 100)
+      let structScore = 95;
+      if (!hasExpSection) structScore -= 30;
+      if (!hasEduSection) structScore -= 20;
+      if (!hasEmail && !hasPhone) structScore -= 25;
+      if (textLength < 400) structScore -= 20;
+
+      // 2. EJE 2: POSICIONAMIENTO Y TITULARIDAD (0 a 100)
+      let strategyScore = 20;
+      if (hasProfileSection) strategyScore += 30;
+
+      if (targetJobInput && targetJobInput.length > 3) {
+        const jobWords = targetJobInput.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+        const matches = jobWords.filter(w => textLower.includes(w));
+        if (matches.length > 0) strategyScore += 40;
+      } else {
+        strategyScore += 20;
       }
 
+      // 3. EJE 3: DENSIDAD SEMÁNTICA Y HARDSKILLS (0 a 100)
       const keywords = SECTOR_KEYWORDS[sector] || SECTOR_KEYWORDS.general;
       let kwFoundCount = 0;
       keywords.forEach(kw => { if (textLower.includes(kw)) kwFoundCount++; });
-      if (kwFoundCount < 4) { kwScore = 40; } else { kwScore = 80; }
 
-      const numbers = rawText.match(/\d+/g);
-      if (!numbers || numbers.length < 3) { metricScore = 35; } else { metricScore = 75; }
+      const kwRatio = kwFoundCount / keywords.length;
+      let kwScore = Math.round(kwRatio * 100) + 15;
+      kwScore = Math.min(95, Math.max(20, kwScore));
 
-      let overallScore = Math.round((structScore + kwScore + metricScore) / 3);
-      overallScore = Math.max(25, Math.min(72, overallScore));
+      // 4. EJE 4: IMPACTO CUANTITATIVO Y KPIS (0 a 100)
+      const percentages = (rawText.match(/\d+\s*%/g) || []).length;
+      const currencies = (rawText.match(/\$\s*\d+|\d+\s*(usd|ars|millones|mil)/gi) || []).length;
+      const metricsTerms = (rawText.match(/\b\d+\s*(personas|empleados|proyectos|horas|hs|km|m2|clientes|equipos|auditorias|inspecciones|pisos)\b/gi) || []).length;
+      const totalMetrics = percentages + currencies + metricsTerms;
+
+      let metricScore = 20;
+      if (totalMetrics >= 4) metricScore = 90;
+      else if (totalMetrics >= 2) metricScore = 65;
+      else if (totalMetrics === 1) metricScore = 40;
+
+      // 5. EJE 5: ARQUITECTURA LINGÜÍSTICA Y VERBOS DE ACCIÓN (0 a 100)
+      let verbsFoundCount = 0;
+      ACTION_VERBS.forEach(verb => { if (textLower.includes(verb)) verbsFoundCount++; });
+      let verbScore = 30;
+      if (verbsFoundCount >= 5) verbScore = 90;
+      else if (verbsFoundCount >= 2) verbScore = 65;
+      else if (verbsFoundCount === 1) verbScore = 45;
+
+      // 6. EJE 6: MATRIZ DE COMPETENCIAS CONDUCTUALES - SOFT SKILLS (0 a 100)
+      let softSkillsFoundCount = 0;
+      SOFT_SKILLS_TERMS.forEach(skill => { if (textLower.includes(skill)) softSkillsFoundCount++; });
+      let softScore = 35;
+      if (softSkillsFoundCount >= 3) softScore = 85;
+      else if (softSkillsFoundCount >= 1) softScore = 60;
+
+      // PUNTAJE GLOBAL PONDERADO (0 a 92)
+      let overallScore = Math.round(
+        (structScore * 0.20) + 
+        (strategyScore * 0.20) + 
+        (kwScore * 0.25) + 
+        (metricScore * 0.15) + 
+        (verbScore * 0.10) + 
+        (softScore * 0.10)
+      );
+      overallScore = Math.max(25, Math.min(92, overallScore));
       currentScore = overallScore;
 
+      // REGISTRO DE ESTADOS DE LOS 6 EJES
+      currentAxisStatus.axis1 = structScore < 60 ? "Riesgo Alto" : structScore < 80 ? "Observado" : "Estructura Legible";
+      currentAxisStatus.axis2 = strategyScore < 50 ? "Sin Titularidad" : strategyScore < 75 ? "Mejorable" : "Alineado";
+      currentAxisStatus.axis3 = kwScore < 50 ? "Brecha Crítica" : kwScore < 75 ? "Incompleto" : "Buena Densidad";
+      currentAxisStatus.axis4 = metricScore < 50 ? "Redacción Pasiva" : metricScore < 75 ? "Sin Métricas Suficientes" : "Alto Impacto";
+      currentAxisStatus.axis5 = verbScore < 50 ? "Tono Pasivo" : verbScore < 75 ? "Jerarquía Media" : "Proyección Liderazgo";
+      currentAxisStatus.axis6 = softScore < 50 ? "Incompleto" : softScore < 75 ? "Parcial" : "Matriz Completa";
+
+      // ACTUALIZAR INTERFAZ GLOBAL
       document.getElementById('resultsPanel').classList.remove('hidden');
       document.getElementById('scoreValue').textContent = `${overallScore}%`;
-      document.getElementById('scoreSummary').textContent = `Basado en los parámetros de sistemas ATS modernos, tu perfil obtuvo un ${overallScore}% de compatibilidad. Los reclutadores corporativos filtran automáticamente perfiles menores a 85%.`;
 
-      // INYECCIÓN DE LOS 4 EJES
+      const scoreValueElem = document.getElementById('scoreValue');
+      const scoreBadgeElem = document.getElementById('scoreBadge');
+
+      if (overallScore < 60) {
+        scoreValueElem.className = "text-4xl font-black text-red-400";
+        scoreBadgeElem.className = "text-[10px] font-bold px-2.5 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30";
+        scoreBadgeElem.textContent = "RIESGO DE DESCARTE SEVERO";
+      } else if (overallScore < 85) {
+        scoreValueElem.className = "text-4xl font-black text-orange-400";
+        scoreBadgeElem.className = "text-[10px] font-bold px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/30";
+        scoreBadgeElem.textContent = "RIESGO DE DESCARTE";
+      } else {
+        scoreValueElem.className = "text-4xl font-black text-emerald-400";
+        scoreBadgeElem.className = "text-[10px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+        scoreBadgeElem.textContent = "COMPATIBILIDAD ACEPTABLE";
+      }
+
+      document.getElementById('scoreSummary').textContent = `Basado en los parámetros de filtros ATS corporativos, tu perfil obtuvo un ${overallScore}% de compatibilidad. Los reclutadores filtran automáticamente perfiles menores a 85%.`;
+
+      // INYECCIÓN DINÁMICA DE TARJETAS PARA LOS 6 EJES
       const container = document.getElementById('issuesList');
       container.innerHTML = `
         <!-- EJE 1: PARSEABILIDAD TÉCNICA -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Parseabilidad y Compatibilidad ATS (Técnico)</span>
-            <span class="${structScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${structScore < 60 ? 'Riesgo Alto' : 'Observado'}</span>
+            <span>1. Parseabilidad y Estructura Digital (Técnico / OCR)</span>
+            <span class="${structScore < 60 ? 'text-red-400' : structScore < 80 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis1}</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-normal">
             ${structScore < 60 
-              ? 'Se detectó riesgo de lectura parcial. Los sistemas como LinkedIn o Computrabajo pueden omitir tu experiencia reciente o desordenar tus datos al escanear.' 
-              : 'Estructura general reconocida, pero con riesgo de omisión de campos clave por inconsistencias en la jerarquía de secciones.'}
+              ? 'Se detectaron fallas estructurales graves. Omitió secciones vitales para los algoritmos ATS (Experiencia, Formación o Datos de Contacto legibles).' 
+              : structScore < 80 
+              ? 'Estructura legible por motores de extracción, pero con riesgo de omisión de campos por inconsistencias menores en la jerarquía de títulos.' 
+              : 'Estructura clara y reconocible. Los encabezados principales y datos de contacto son extraíbles correctamente por algoritmos ATS.'}
           </p>
         </div>
 
-        <!-- EJE 2: ESTRATEGIA Y POSICIONAMIENTO -->
+        <!-- EJE 2: POSICIONAMIENTO Y TITULARIDAD -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Estrategia y Posicionamiento de Perfil (Reclutador)</span>
-            <span class="text-red-400 font-semibold">Crítico</span>
+            <span>2. Posicionamiento y Titularidad de Perfil (Reclutador)</span>
+            <span class="${strategyScore < 50 ? 'text-red-400' : strategyScore < 75 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis2}</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-normal">
-            Falta de estrategia laboral y titularidad profesional. Tu CV no proyecta seniority para el puesto objetivo y se lee como una descripción genérica de tareas.
+            ${strategyScore < 50 
+              ? 'Falta de estrategia laboral y titularidad profesional. Tu CV no proyecta seniority para el puesto objetivo y se lee como una descripción genérica de tareas.' 
+              : strategyScore < 75 
+              ? 'Posee presentación básica, pero carece de la alineación de titularidad ejecutiva requerida para destacar en las ternas de preselección.' 
+              : 'Presenta buen posicionamiento técnico y correcta alineación de perfil con el rol profesional objetivo.'}
           </p>
         </div>
 
         <!-- EJE 3: DENSIDAD SEMÁNTICA -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Densidad Semántica y Brecha de Palabras Clave</span>
-            <span class="${kwScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${kwScore < 60 ? 'Brecha Crítica' : 'Incompleto'}</span>
+            <span>3. Densidad Semántica y Vocabulario del Sector (Hard Skills)</span>
+            <span class="${kwScore < 50 ? 'text-red-400' : kwScore < 75 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis3}</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-normal">
-            ${kwScore < 60 
-              ? 'Tu CV no alcanza el umbral de coincidencia del 85%. Faltan términos técnicos normativos y competencias duras clave para superar el primer filtro.' 
-              : 'Posee vocabulario base, pero carece de las combinaciones semánticas avanzadas exigidas por los algoritmos corporativos.'}
+            ${kwScore < 50 
+              ? 'Brecha Semántica Crítica. Tu CV no alcanza el umbral de coincidencia del 85%. Faltan términos técnicos normativos y herramientas clave para este sector.' 
+              : kwScore < 75 
+              ? 'Coincidencia semántica parcial. Posee vocabulario general del rubro, pero carece de la densidad de combinaciones técnicas avanzadas exigidas por los algoritmos.' 
+              : 'Buena densidad semántica. Registra coincidencia sólida con el lenguaje técnico y normativo del área seleccionada.'}
           </p>
         </div>
 
-        <!-- EJE 4: IMPACTO Y KPIS -->
+        <!-- EJE 4: IMPACTO CUANTITATIVO -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>• Impacto Cuantitativo y Orientación a Resultados (KPIs)</span>
-            <span class="${metricScore < 60 ? 'text-red-400' : 'text-orange-400'} font-semibold">${metricScore < 60 ? 'Redacción Pasiva' : 'Sin Métricas'}</span>
+            <span>4. Impacto Cuantitativo y Orientación a Resultados (KPIs)</span>
+            <span class="${metricScore < 50 ? 'text-red-400' : metricScore < 75 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis4}</span>
           </div>
           <p class="text-[11px] text-slate-400 leading-normal">
-            ${metricScore < 60 
+            ${metricScore < 50 
               ? 'Redacción pasiva. Tu experiencia describe "lo que hacías" pero no demuestra "qué lograste" (ausencia de porcentajes, cifras o volumen de gestión).' 
-              : 'Registra algunas cifras aisladas, pero sin el encuadre de logros cuantitativos relevantes que buscan los reclutadores para avanzar.'}
+              : metricScore < 75 
+              ? 'Se detectó presencia mínima de cifras. Requiere mayor encuadre cuantitativo (% de optimización, personas supervisadas, montos) para generar impacto.' 
+              : 'Excelente demostración cuantitativa de resultados, datos numéricos e indicadores de desempeño.'}
+          </p>
+        </div>
+
+        <!-- EJE 5: ARQUITECTURA LINGÜÍSTICA -->
+        <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-slate-200 flex items-center justify-between">
+            <span>5. Arquitectura Lingüística y Verbos de Acción (Seniority)</span>
+            <span class="${verbScore < 50 ? 'text-red-400' : verbScore < 75 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis5}</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-normal">
+            ${verbScore < 50 
+              ? 'Predominio de frases descriptivas débiles ("encargado de", "asistencia en"). Requiere reestructuración con verbos resolutivos de liderazgo.' 
+              : verbScore < 75 
+              ? 'Uso moderado de verbos de acción. Sujeto a optimización estilística para proyectar mayor nivel de autonomía y responsabilidad.' 
+              : 'Solidez lingüística. Redacción articulada en torno a verbos de acción que proyectan capacidad resolutiva y jerarquía.'}
+          </p>
+        </div>
+
+        <!-- EJE 6: COMPETENCIAS CONDUCTUALES -->
+        <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
+          <div class="font-bold text-slate-200 flex items-center justify-between">
+            <span>6. Completitud y Matriz de Competencias Conductuales (Soft Skills)</span>
+            <span class="${softScore < 50 ? 'text-red-400' : softScore < 75 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis6}</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-normal">
+            ${softScore < 50 
+              ? 'Ausencia de un bloque estandarizado de Competencias Conductuales (Soft Skills). Los sistemas de selección descartan perfiles que no acreditan habilidades de gestión.' 
+              : softScore < 75 
+              ? 'Registra habilidades blandas aisladas. Se recomienda estructurar una matriz formal de competencias transversales.' 
+              : 'Estructuración sólida de habilidades blandas y competencias conductuales alineadas al perfil profesional.'}
           </p>
         </div>
       `;
@@ -539,7 +758,7 @@
     });
 
     // ==========================================
-    // WHATSAPP Y MODAL USD
+    // WHATSAPP CON RESUMEN DE LOS 6 EJES
     // ==========================================
     function handleOrderSubmit(e) {
       e.preventDefault();
@@ -558,6 +777,15 @@
 
       if (currentScore > 0) {
         msg += `%0A📉 *Diagnóstico Previo ATS:* ${currentScore}% de Compatibilidad.%0A`;
+        msg += `%0A📊 *Detalle de los 6 Ejes Evaluados:*%0A`;
+        msg += `• Parseabilidad Técnica: ${currentAxisStatus.axis1}%0A`;
+        msg += `• Posicionamiento / Titularidad: ${currentAxisStatus.axis2}%0A`;
+        msg += `• Densidad Semántica: ${currentAxisStatus.axis3}%0A`;
+        msg += `• Impacto y KPIs: ${currentAxisStatus.axis4}%0A`;
+        msg += `• Arquitectura Lingüística: ${currentAxisStatus.axis5}%0A`;
+        msg += `• Matriz de Competencias: ${currentAxisStatus.axis6}%0A`;
+      } else if (currentAxisStatus.axis1.includes("Canva")) {
+        msg += `%0A📉 *Diagnóstico Previo ATS:* 0% (Documento en Imagen / Canva)%0A`;
       }
       
       msg += `%0A¿Me podrían indicar los medios de pago para abonar el 50% inicial y enviarles mi CV actual?`;
