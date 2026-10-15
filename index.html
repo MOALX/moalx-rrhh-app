@@ -149,7 +149,7 @@
             <span>AUDITORÍA COMPLETA Y REORGANIZACIÓN TÉCNICA (RESERVADO)</span>
           </div>
           <p class="text-[11px] text-slate-300 leading-normal blur-[1.5px] select-none">
-            Se detectó un fallo estructural severo en la jerarquía del perfil y brecha crítica de palabras clave. El modelo de reescritura técnica y la matriz de competencias se adaptan exclusivamente en nuestros Packs.
+            Se detectaron fallos estructurales severos en la jerarquía del perfil. El modelo de reescritura técnica, desinfección de formato y matriz de competencias se adaptan exclusivamente en nuestros Packs.
           </p>
           <div class="absolute inset-0 bg-[#0B0F19]/60 flex items-center justify-center backdrop-blur-[2px] rounded-xl">
             <a href="#orderForm" class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow-lg flex items-center gap-2 transition-all transform hover:scale-105">
@@ -490,7 +490,7 @@
     });
 
     // ==========================================
-    // MOTOR ATS REAL DE 6 EJES DINÁMICOS (FLEXIBILIZADO)
+    // MOTOR ATS REAL DE 6 EJES DINÁMICOS (FLEXIBILIZADO + ANTI-DISEÑO)
     // ==========================================
     document.getElementById('analyzeBtn').addEventListener('click', () => {
       const usage = getDailyUsage();
@@ -553,6 +553,21 @@
       const textLower = rawText.toLowerCase();
 
       // ==========================================
+      // DETECCIÓN DE INTERFERENCIA GRÁFICA Y FORMATO COMPLEJO (CANVA / BARRAS DE PROGRESO)
+      // Buscamos caracteres unicode que suelen ser barras de nivel, viñetas raras o espacios excesivos por columnas
+      // ==========================================
+      const visualTrashCount = (rawText.match(/[█▓▒░★☆✓✔✘✖✅❌⭐🎯💡\u2600-\u26FF\u2700-\u27BF]/g) || []).length;
+      const layoutGapsCount = (rawText.match(/\s{8,}/g) || []).length; // Canva suele dejar espacios enormes al extraer texto
+      
+      let formatPenalty = 0;
+      let hasDesignInterference = false;
+
+      if (visualTrashCount > 2 || layoutGapsCount > 5) {
+        formatPenalty = 25; // Castigo severo si detecta formato no-plano
+        hasDesignInterference = true;
+      }
+
+      // ==========================================
       // EVALUACIÓN DE LAS 8 SECCIONES VITALES (FLEXIBILIZADO CON SINÓNIMOS)
       // ==========================================
       const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(rawText);
@@ -562,12 +577,13 @@
       const hasEduSection = textLower.includes("educacion") || textLower.includes("educación") || textLower.includes("estudios") || textLower.includes("formacion") || textLower.includes("titulo") || textLower.includes("academica");
       const hasProfileSection = textLower.includes("perfil") || textLower.includes("resumen") || textLower.includes("objetivo") || textLower.includes("presentacion") || textLower.includes("sobre mi");
 
-      // 1. EJE 1: PARSEABILIDAD TÉCNICA Y ESTRUCTURA (0 a 100)
-      let structScore = 95;
+      // 1. EJE 1: PARSEABILIDAD, FORMATO Y LIMPIEZA VISUAL (0 a 100)
+      let structScore = 95 - formatPenalty;
       if (!hasExpSection) structScore -= 30;
       if (!hasEduSection) structScore -= 20;
       if (!hasEmail && !hasPhone) structScore -= 25;
       if (textLength < 400) structScore -= 20;
+      structScore = Math.max(10, structScore); // Piso para que no de negativo
 
       // 2. EJE 2: POSICIONAMIENTO Y TITULARIDAD (0 a 100)
       let strategyScore = 20;
@@ -629,7 +645,12 @@
       currentScore = overallScore;
 
       // REGISTRO DE ESTADOS DE LOS 6 EJES
-      currentAxisStatus.axis1 = structScore < 60 ? "Riesgo Alto" : structScore < 80 ? "Observado" : "Estructura Legible";
+      if (hasDesignInterference) {
+        currentAxisStatus.axis1 = "Interferencia Gráfica";
+      } else {
+        currentAxisStatus.axis1 = structScore < 60 ? "Riesgo Alto" : structScore < 80 ? "Observado" : "Estructura Legible";
+      }
+      
       currentAxisStatus.axis2 = strategyScore < 50 ? "Sin Titularidad" : strategyScore < 75 ? "Mejorable" : "Alineado";
       currentAxisStatus.axis3 = kwScore < 50 ? "Brecha Crítica" : kwScore < 75 ? "Incompleto" : "Buena Densidad";
       currentAxisStatus.axis4 = metricScore < 50 ? "Redacción Pasiva" : metricScore < 75 ? "Sin Métricas Suficientes" : "Alto Impacto";
@@ -659,22 +680,28 @@
 
       document.getElementById('scoreSummary').textContent = `Basado en los parámetros de filtros ATS corporativos, tu perfil obtuvo un ${overallScore}% de compatibilidad. Los reclutadores filtran automáticamente perfiles menores a 85%.`;
 
+      // Mensaje dinámico para EJE 1
+      let eje1Message = '';
+      if (hasDesignInterference) {
+        eje1Message = 'El sistema detectó interferencia de diseño. El uso de plantillas gráficas complejas (ej. Canva), barras de progreso, columnas o iconos no estandarizados bloquea el escaneo del ATS corporativo. Se requiere formato plano sin elementos visuales.';
+      } else {
+        eje1Message = structScore < 60 
+          ? 'Se detectaron fallas estructurales graves. Omitió secciones vitales para los algoritmos ATS (Experiencia, Formación o Datos de Contacto legibles).' 
+          : structScore < 80 
+          ? 'Estructura legible por motores de extracción, pero con riesgo de omisión de campos por inconsistencias menores en la jerarquía de títulos.' 
+          : 'Estructura clara y reconocible. Los encabezados principales y datos de contacto son extraíbles correctamente por algoritmos ATS.';
+      }
+
       // INYECCIÓN DINÁMICA DE TARJETAS PARA LOS 6 EJES
       const container = document.getElementById('issuesList');
       container.innerHTML = `
         <!-- EJE 1: PARSEABILIDAD TÉCNICA -->
         <div class="p-3 bg-[#0B0F19] rounded-xl border border-slate-800 space-y-1">
           <div class="font-bold text-slate-200 flex items-center justify-between">
-            <span>1. Parseabilidad y Estructura Digital (Técnico / OCR)</span>
-            <span class="${structScore < 60 ? 'text-red-400' : structScore < 80 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis1}</span>
+            <span>1. Parseabilidad, Formato y Limpieza Visual (Técnico/OCR)</span>
+            <span class="${hasDesignInterference || structScore < 60 ? 'text-red-400' : structScore < 80 ? 'text-orange-400' : 'text-emerald-400'} font-semibold">${currentAxisStatus.axis1}</span>
           </div>
-          <p class="text-[11px] text-slate-400 leading-normal">
-            ${structScore < 60 
-              ? 'Se detectaron fallas estructurales graves. Omitió secciones vitales para los algoritmos ATS (Experiencia, Formación o Datos de Contacto legibles).' 
-              : structScore < 80 
-              ? 'Estructura legible por motores de extracción, pero con riesgo de omisión de campos por inconsistencias menores en la jerarquía de títulos.' 
-              : 'Estructura clara y reconocible. Los encabezados principales y datos de contacto son extraíbles correctamente por algoritmos ATS.'}
-          </p>
+          <p class="text-[11px] text-slate-400 leading-normal">${eje1Message}</p>
         </div>
 
         <!-- EJE 2: POSICIONAMIENTO Y TITULARIDAD -->
