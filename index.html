@@ -490,7 +490,7 @@
     });
 
     // ==========================================
-    // MOTOR ATS REAL DE 6 EJES DINÁMICOS
+    // MOTOR ATS REAL DE 6 EJES DINÁMICOS (FLEXIBILIZADO)
     // ==========================================
     document.getElementById('analyzeBtn').addEventListener('click', () => {
       const usage = getDailyUsage();
@@ -553,13 +553,14 @@
       const textLower = rawText.toLowerCase();
 
       // ==========================================
-      // EVALUACIÓN DE LAS 8 SECCIONES VITALES
+      // EVALUACIÓN DE LAS 8 SECCIONES VITALES (FLEXIBILIZADO CON SINÓNIMOS)
       // ==========================================
       const hasEmail = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(rawText);
       const hasPhone = /\+?\d[\d\s\-]{7,}/.test(rawText);
-      const hasExpSection = textLower.includes("experiencia") || textLower.includes("trayectoria") || textLower.includes("laboral") || textLower.includes("puestos");
-      const hasEduSection = textLower.includes("educacion") || textLower.includes("estudios") || textLower.includes("formacion") || textLower.includes("titulo");
-      const hasProfileSection = textLower.includes("perfil") || textLower.includes("resumen") || textLower.includes("objetivo") || textLower.includes("presentacion");
+      
+      const hasExpSection = textLower.includes("experiencia") || textLower.includes("trayectoria") || textLower.includes("laboral") || textLower.includes("puestos") || textLower.includes("antecedentes");
+      const hasEduSection = textLower.includes("educacion") || textLower.includes("educación") || textLower.includes("estudios") || textLower.includes("formacion") || textLower.includes("titulo") || textLower.includes("academica");
+      const hasProfileSection = textLower.includes("perfil") || textLower.includes("resumen") || textLower.includes("objetivo") || textLower.includes("presentacion") || textLower.includes("sobre mi");
 
       // 1. EJE 1: PARSEABILIDAD TÉCNICA Y ESTRUCTURA (0 a 100)
       let structScore = 95;
@@ -580,14 +581,14 @@
         strategyScore += 20;
       }
 
-      // 3. EJE 3: DENSIDAD SEMÁNTICA Y HARDSKILLS (0 a 100)
+      // 3. EJE 3: DENSIDAD SEMÁNTICA Y HARDSKILLS (0 a 100) - ¡FLEXIBILIZADO CON TOPE MÁS GENEROSO!
       const keywords = SECTOR_KEYWORDS[sector] || SECTOR_KEYWORDS.general;
       let kwFoundCount = 0;
       keywords.forEach(kw => { if (textLower.includes(kw)) kwFoundCount++; });
 
-      const kwRatio = kwFoundCount / keywords.length;
-      let kwScore = Math.round(kwRatio * 100) + 15;
-      kwScore = Math.min(95, Math.max(20, kwScore));
+      const kwRatio = kwFoundCount / Math.min(keywords.length, 15); // Exige un tope de 15 fuertes, no el diccionario entero
+      let kwScore = Math.round(kwRatio * 100) + 30; // Bonificación de base
+      kwScore = Math.min(98, Math.max(50, kwScore)); // El mínimo es 50 (Incompleto) y el máximo 98
 
       // 4. EJE 4: IMPACTO CUANTITATIVO Y KPIS (0 a 100)
       const percentages = (rawText.match(/\d+\s*%/g) || []).length;
@@ -596,26 +597,26 @@
       const totalMetrics = percentages + currencies + metricsTerms;
 
       let metricScore = 20;
-      if (totalMetrics >= 4) metricScore = 90;
-      else if (totalMetrics >= 2) metricScore = 65;
-      else if (totalMetrics === 1) metricScore = 40;
+      if (totalMetrics >= 4) metricScore = 95;
+      else if (totalMetrics >= 2) metricScore = 75;
+      else if (totalMetrics === 1) metricScore = 50;
 
       // 5. EJE 5: ARQUITECTURA LINGÜÍSTICA Y VERBOS DE ACCIÓN (0 a 100)
       let verbsFoundCount = 0;
       ACTION_VERBS.forEach(verb => { if (textLower.includes(verb)) verbsFoundCount++; });
       let verbScore = 30;
-      if (verbsFoundCount >= 5) verbScore = 90;
-      else if (verbsFoundCount >= 2) verbScore = 65;
-      else if (verbsFoundCount === 1) verbScore = 45;
+      if (verbsFoundCount >= 5) verbScore = 95;
+      else if (verbsFoundCount >= 2) verbScore = 70;
+      else if (verbsFoundCount === 1) verbScore = 50;
 
       // 6. EJE 6: MATRIZ DE COMPETENCIAS CONDUCTUALES - SOFT SKILLS (0 a 100)
       let softSkillsFoundCount = 0;
       SOFT_SKILLS_TERMS.forEach(skill => { if (textLower.includes(skill)) softSkillsFoundCount++; });
       let softScore = 35;
-      if (softSkillsFoundCount >= 3) softScore = 85;
-      else if (softSkillsFoundCount >= 1) softScore = 60;
+      if (softSkillsFoundCount >= 3) softScore = 95;
+      else if (softSkillsFoundCount >= 1) softScore = 70;
 
-      // PUNTAJE GLOBAL PONDERADO (0 a 92)
+      // PUNTAJE GLOBAL PONDERADO (Ahora tope máximo 98% en lugar de 92%)
       let overallScore = Math.round(
         (structScore * 0.20) + 
         (strategyScore * 0.20) + 
@@ -624,7 +625,7 @@
         (verbScore * 0.10) + 
         (softScore * 0.10)
       );
-      overallScore = Math.max(25, Math.min(92, overallScore));
+      overallScore = Math.max(25, Math.min(98, overallScore));
       currentScore = overallScore;
 
       // REGISTRO DE ESTADOS DE LOS 6 EJES
